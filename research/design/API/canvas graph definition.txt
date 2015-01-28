@@ -1,0 +1,26 @@
+;; input table
+[{:DC "main" :DSC "a" :DX1 20 :DX2 10}
+ {:DC "gene" :DSC "a" :DX1 30 :DX2 20}
+ {:DC "gene" :DSC "a" :DX1 10 :DX2 50}
+ {:DC "gene" :DSC "b" :DX1 30 :DX2 10}
+ {:DC "main" :DSC "b" :DX1 40 :DX2 40}
+ {:DC "main" :DSC "b" :DX1 10 :DX2 30}]
+
+;; query table
+{:DC grouping :DSC grouping :DX1 +}
+
+[{:DC "main" :DSC "a" :DX1 20}
+ {:DC "gene" :DSC "a" :DX1 40}
+ {:DC "gene" :DSC "b" :DX1 30}
+ {:DC "main" :DSC "b" :DX1 50}]
+
+{:measurements (stacked [[2 0] [2 1]] [[3 0] [3 1]])}
+{:dimensions (clustered (overlapped [2 0] [2 1] [3 0]) [3 1])}
+
+{:coordinate-system cartesian
+ :a {:data-representation category :data [[0 0]]}
+ :b {:data-representation numeric :data [[2 0] [2 1] [3 0] [3 1]]}}
+ 
+{:data-path straight :data-points-a [[0 0]] :data-points-b [[2 0] [2 1]]}
+{:data-path stepped :data-points-a [[0 0]] :data-points-b [[3 0]]}
+{:data-path line :data-points-a [[0 0]] :data-points-b [[3 1]]}

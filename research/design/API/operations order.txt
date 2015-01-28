@@ -1,0 +1,88 @@
+1. run transpose/group functions
+2. run stacking/clustering/overlapping/ordering functions
+3. data values to coordinates (processing)
+4. run path drawing on points functions 
+5. run clip figure function
+6. run styling
+
+PInterpolation
+	interpolate
+	
+		defrecord LinearInterpolation
+		defrecord PolynomialInterpolation
+
+PExtrapolation
+	extrapolate
+		
+		defrecord LinearExtrapolation
+		defrecord PolynomialExtrapolation
+		defrecord ConicalExtrapolation
+		defrecord FrenchCurveExtrapolation
+		
+PDataOrganization
+	group-aggregate-data
+	
+// data is ready now to be displayed as coordinates
+PDimension 
+	arrange-data-points
+	
+		defrecord Clustered
+		defrecord Overlapped
+	
+PMeasurement
+	arrange-data-points
+
+		defrecord Stacked // stacking is made in groups so stacked with only one series is the same as normal
+		defrecord Stacked100
+			
+PDataRepresentation
+	transform
+	
+		defrecord CategoryScale
+		defrecord DateTimeScale
+		defrecord NumericScale
+		defrecord LogarithmicScale
+		defrecord ExponentialScale
+		
+PCoordinateSystem
+	generate-coordinates
+	
+		defrecord PolarCoordinateSystem
+		defrecord CartesianCoordinateSystem
+		
+PDataPathGeometry
+	generate-data-path
+	
+		nil // no data path
+		defrecord Straight
+		defrecord Smooth // Bezier
+		defrecord Stepped
+		defrecord Line
+		defrecord Arc
+
+PAreaGeometry
+	generate-auxiliary-paths
+	generate-areas
+	
+		// something here is wrong - the area geometry can be: 
+		// straight to the axis (simple area graph)
+		// to the next data path (range area or range bars)
+		// to the next data path and the last data path - straight to the axis (stacked bars, area)
+		// there is the option to have custom aux paths
+		// and being able to combine (ToAxisAndDataPath) means that PAreaGeometry is part of each data path
+		// furthermore there is very heavy influence by PArrangement
+		// so these are somewhat tied and need to be investigated and decoupled
+		nil // no area or auxiliary path 
+		defrecord ToAxis
+		defrecord ToDataPath
+		defrecord ToAxisAndDataPath
+	
+PMask
+	apply-mask
+	
+		nil // no mask
+		defrecord StandardMask
+
+PStyle
+	line
+	area

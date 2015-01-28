@@ -1,0 +1,100 @@
+var ang = 1439;
+
+function normalize(angleDeg)
+{
+  return (((angleDeg) % 360) + 360) % 360;
+}
+
+function toRadians(angleInDegrees) {
+	return (angleInDegrees - 90) * Math.PI / 180.0;
+}
+
+function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+  var angleInRadians = toRadians(angleInDegrees);
+
+  var a = centerX + (radius * Math.cos(angleInRadians));
+  var b = centerY + (radius * Math.sin(angleInRadians));
+  return {
+    x: a.toFixed(2),
+    y: b.toFixed(2)
+  };
+}
+
+function polarCartesian(polarSet){
+  var count = polarSet.length;
+  var cartesianSet = [];
+  var step = 360 / count;
+  for(var i = 0; i < count; i++)
+    {
+      cartesianSet[i] = polarToCartesian(0,0,polarSet[i],step * i);
+    }
+  
+  return cartesianSet;
+}
+
+function coefficient(oMax, oMin, nMax, nMin){
+  return (oMax - oMin) / (nMax - nMin);
+}
+
+function difference(oMax, oX, k)
+{
+  return (oMax - oX) / k;
+}
+
+function newX(nMax, diff)
+{
+  return nMax - diff;
+}
+
+function convertToNewRange(oMax, oMin, nMax, nMin, oX){
+  var k = coefficient(oMax,oMin,nMax,nMin);
+  var diff = difference(oMax,oX,k);
+  var nX = newX(nMax, diff);
+  
+  return nX;
+}
+
+function newRange(dataSet){
+   var count = dataSet.length;
+  var newSet = [];
+  for(var i = 0; i < count; i++)
+    {
+      newSet[i] = convertToNewRange(100,0,100,50,dataSet[i]);
+    }
+  
+  return newSet;
+}
+
+function toSvg(coordinatesSet, closePath){
+   var count = coordinatesSet.length;
+  var svgPath = "M " + coordinatesSet[0].x + " " + coordinatesSet[0].y;
+  
+
+  for(var i = 1; i < count; i++)
+    {
+      svgPath += " L " + coordinatesSet[i].x + " " + coordinatesSet[i].y;
+    }
+  
+  if(closePath)
+    {
+      svgPath += " Z";
+    }
+  
+  return svgPath;
+}
+
+var dataSet = [70, 30, 100, 50];
+var dataSetWithHole = newRange(dataSet);
+var largeDataSet = [70, 30, 100, 50, 20, 80, 90, 45, 15];
+
+var cartesianSet = polarCartesian(dataSet);
+var cartesianSetWithHole = polarCartesian(dataSetWithHole);
+var cartesianLargeDataSet = polarCartesian(largeDataSet);
+
+var svgPath = toSvg(cartesianSet, true);
+var svgPath2 = toSvg(cartesianSetWithHole, true);
+var svgPath3 = toSvg(cartesianLargeDataSet, true);
+
+document.querySelector("#polar-line").setAttribute("d", svgPath);
+document.querySelector("#polar-line2").setAttribute("d", svgPath2);
+document.querySelector("#polar-line3").setAttribute("d", svgPath3);

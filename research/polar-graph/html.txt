@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+  <svg height="600" width="600">
+    <defs>
+    </defs>
+    <path fill="none" stroke="#4F81BD" d="M 100 30 L 200 70 L 300 0 L 400 50" />
+    
+    <g>
+    <path id="polar-line" transform="matrix(1 0 0 1 100 200)" fill="none" stroke="#4F81BD" />
+    <circle cx="100" cy="200" r="20" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="100" cy="200" r="40" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="100" cy="200" r="60" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="100" cy="200" r="80" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="100" cy="200" r="100" stroke="lightgrey" stroke-width="1" fill="none" />
+    <path d="M 100 100 L 100 300" stroke="lightgrey" fill="none" />
+    <path d="M 0 200 L 200 200" stroke="lightgrey" fill="none" />
+    </g>
+    
+    
+    
+    
+    <g>
+    <path id="polar-line2" transform="matrix(1 0 0 1 300 200)" fill="none" stroke="#4F81BD" />
+    <circle cx="300" cy="200" r="50" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="300" cy="200" r="60" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="300" cy="200" r="70" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="300" cy="200" r="80" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="300" cy="200" r="90" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="300" cy="200" r="100" stroke="lightgrey" stroke-width="1" fill="none" />
+    <path d="M 200 200 L 250 200" stroke="lightgrey" fill="none" />
+    <path d="M 300 100 L 300 150" stroke="lightgrey" fill="none" />
+    <path d="M 350 200 L 400 200" stroke="lightgrey" fill="none" />
+    <path d="M 300 250 L 300 300" stroke="lightgrey" fill="none" />
+    </g>
+    
+    
+    <g>  
+    <path id="polar-line3" transform="matrix(1 0 0 1 100 400)" fill="none" stroke="#4F81BD" />
+    <circle cx="100" cy="400" r="20" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="100" cy="400" r="40" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="100" cy="400" r="60" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="100" cy="400" r="80" stroke="lightgrey" stroke-width="1" fill="none" />
+    <circle cx="100" cy="400" r="100" stroke="lightgrey" stroke-width="1" fill="none" />
+    <path d="M 100 300 L 100 500" stroke="lightgrey" fill="none" />
+    <path d="M 0 400 L 200 400" stroke="lightgrey" fill="none" />
+    </g>
+    
+    
+  </svg>
+  
+  <p id="p1"></p>
+</body>
+</html>

@@ -1,0 +1,3 @@
+http://schepers.cc/getting-to-the-point
+http://stackoverflow.com/questions/7008006/draw-good-looking-bezier-curve-through-random-points
+http://www.particleincell.com/blog/2012/bezier-splines/

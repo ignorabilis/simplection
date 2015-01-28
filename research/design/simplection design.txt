@@ -1,0 +1,38 @@
+Canvas Graph - the most flexible graph in the world, which esentially can be used even for drawing
+
+A. Requirements
+	1. To be able to create all Telerik Reporting graph types
+		- Line charts (smooth, stepped, straight(arcs or really straight))
+		- Area (smooth, stepped, straight(arcs or really straight))
+		- Bars (control bar width)
+		- Pie (and other pies that are not Stacked 100)
+		- Doughnut
+		- Line polar (radar) (smooth, stepped, straight(arcs or really straight))
+		- Area polar (filled radar) (smooth, stepped, straight(arcs or really straight))
+		- Bar polar (rose radar)
+		- Polar graph starting angle, direction, inner radius (for doughnut), sweep? angle (for semi circles)
+		- Move axis and represent axis labels and ticks as table or other
+		- Clustered, Stacked, Stacked 100%, Overlapped, Range
+		- Markers
+		- Bubble (marker size)
+		- Line, area, marker fill and border (color, stepped color, linear gradient, radial gradient, pattern)
+		- Conditional formatting
+	2. Build on top of that
+		- True stack/ranged graphs with more than 2 values (this will enable Gantt, Candlestick and other charts)
+		- Represent tables as charts
+		- Polar tables
+		- Multiple graph plots (sub graphs) in the same graph
+		- Infographics - shape bars and areas or add shapes on top
+		- Tree maps
+		- Interactivity - tooltips, graph sections zoom in, follow cursor with a line and a point on the data path, comments on items
+		- Drill down interactivity
+		- Drill through interactivity
+		- Graph markers (graph in graph)
+		- Smart labels
+		- Other crazy types (http://www.nytimes.com/interactive/2008/05/03/business/20080403_SPENDING_GRAPHIC.html?_r=0)
+	3. Maps
+		- Real world maps
+		- Political maps (choropleth)
+	
+B. Work
+	1. Concentrate on the plot, forget (for now) about the axis and other components
