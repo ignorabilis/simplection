@@ -1,1 +1,0 @@
-Interactive point that follows the data path - http://bl.ocks.org/duopixel/3824661

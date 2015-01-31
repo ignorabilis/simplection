@@ -1,8 +1,8 @@
-(ns simplection.testing.graph-testing
-  (:require [simplection.canvasgraph.data-paths :refer [generate-data-path]]
+(ns simplection.preview.graph
+  (:require [simplection.canvasgraph.path :refer [generate-data-path]]
             [simplection.report :refer [hiccup->svg generate-report]]
-            [simplection.testing.helpers :refer [svg-quotes-helper]])
-  (:import [simplection.canvasgraph.data_paths Straight]
+            [simplection.preview.helpers :refer [svg-quotes-helper]])
+  (:import [simplection.canvasgraph.path Straight]
            [simplection.report Report ReportItem]))
 
 (def test-data-1 (Straight. [[[180 455][189 412][199 355][208 381][217 377][226 416][236 407][245 338][254 312][263 282][273 316][282 303][291 325][301 282]

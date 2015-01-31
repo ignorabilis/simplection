@@ -1,6 +1,6 @@
-(ns simplection.core-test
+(ns simplection.test.aggregation
   (:require [midje.sweet :refer :all]
-            [simplection.data-aggregation :refer :all]))
+            [simplection.aggregation :refer :all]))
 
 (def canvas-graph-definition-old {:aggregates [{:aggregate "category-group" :data [0]}
                                            {:aggregate "series-group" :data [1]}

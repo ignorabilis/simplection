@@ -35,7 +35,7 @@ PMeasurement
 		defrecord Stacked // stacking is made in groups so stacked with only one series is the same as normal
 		defrecord Stacked100
 			
-PDataRepresentation
+PScales
 	transform
 	
 		defrecord CategoryScale
@@ -70,7 +70,7 @@ PAreaGeometry
 		// to the next data path and the last data path - straight to the axis (stacked bars, area)
 		// there is the option to have custom aux paths
 		// and being able to combine (ToAxisAndDataPath) means that PAreaGeometry is part of each data path
-		// furthermore there is very heavy influence by PArrangement
+		// furthermore there is very heavy influence by PArrangement 
 		// so these are somewhat tied and need to be investigated and decoupled
 		nil // no area or auxiliary path 
 		defrecord ToAxis

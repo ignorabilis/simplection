@@ -35,7 +35,7 @@
      :y (+ center-y (* radius (Math/sin angle-radians)))}))
 
 (defn polar->cartesian
- "Converts a whole collection to polar coordinates to cartesian coordinates"
+ "Converts a whole collection from polar coordinates to cartesian coordinates"
  [coll-polar-coordinates]
  (let [angle-step (/ 360 (count coll-polar-coordinates))]
    (map #(polar-point->cartesian-point 0 0 %1 (* angle-step %2)) coll-polar-coordinates (range))))

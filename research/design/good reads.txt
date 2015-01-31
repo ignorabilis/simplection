@@ -1,0 +1,10 @@
+;; Data mining
+Clojure data analysis cookbook
+
+;; Bezier
+http://schepers.cc/getting-to-the-point
+http://stackoverflow.com/questions/7008006/draw-good-looking-bezier-curve-through-random-points
+http://www.particleincell.com/blog/2012/bezier-splines/
+
+;; Interactivity
+Interactive point that follows the data path - http://bl.ocks.org/duopixel/3824661

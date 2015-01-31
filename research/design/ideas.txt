@@ -1,8 +1,8 @@
-Multiple axis for the polar graph
+Draw multiple axis for the polar graph
 Arcs as data path for polar graph
 Lines as data path for polar graph
 Polar table - https://www.google.bg/search?q=rose+radar+chart&espv=2&biw=1680&bih=925&source=lnms&tbm=isch&sa=X&ei=IJymVLTBAYP9UoeggrAN&ved=0CAYQ_AUoAQ#facrc=_&imgdii=_&imgrc=URmupihBfzWpyM%253A%3BcAzchTl-OzOvxM%3Bhttp%253A%252F%252Fwww.cumbriasoaringclub.co.uk%252Fimages%252FCSC_Windrose.jpg%3Bhttp%253A%252F%252Fjstout989.blogspot.com%252F2010_11_01_archive.html%3B770%3B749
-Fibonachi Graph?
+Fibonacci Graph?
 
 Chord Chart - http://sdk.gooddata.com/gooddata-js/example/chord-chart-to-analyze-sales/
 Smith Chart

@@ -1,4 +1,4 @@
-(ns simplection.utils)
+(ns simplection.range)
 
 (defn ranges-coefficient
   "Gets the coefficient of two ranges."

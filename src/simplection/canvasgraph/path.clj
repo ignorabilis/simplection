@@ -1,11 +1,11 @@
-(ns simplection.canvasgraph.data-paths)
+(ns simplection.canvasgraph.path)
 
-(defprotocol PDataPathGeometry
+(defprotocol PPathGeometry
   (generate-data-path [this]))
 
 (defrecord Straight[coll])
 
-(extend-protocol PDataPathGeometry
+(extend-protocol PPathGeometry
   Straight
   (generate-data-path [{points :coll}] 
     (vec 
