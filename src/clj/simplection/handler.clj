@@ -13,7 +13,7 @@
       [:div {:id "content"} "Hello World"]]))
 
 (defroutes app
-  (GET "/" [] (index-page))
-  (GET  "/ind" [] (resource-response "index.html" {:root "public"}))
+  (GET  "/" [] (resource-response "index.html" {:root "public"}))
+  (GET "/ind" [] (index-page))
   (route/resources "/")
   (route/not-found "Page not found"))
