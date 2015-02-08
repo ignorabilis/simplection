@@ -1,5 +1,6 @@
 (ns simplection.core
   (:require [simplection.views.home :as home]
+            [simplection.views.designer :as designer]
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
             [secretary.core :as secretary :include-macros true]
@@ -13,7 +14,7 @@
 ;; Views
 
 (defn current-page []
-  [:div [(session/get :current-page)]])
+  [(session/get :current-page)])
 
 ;; -------------------------
 ;; Routes
@@ -26,7 +27,7 @@
   (session/put! :current-page home/pricing-page))
 
 (secretary/defroute "/start-now" []
-  (session/put! :current-page home/start-now))
+  (session/put! :current-page designer/designer-init))
 
 ;; -------------------------
 ;; History

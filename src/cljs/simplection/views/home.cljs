@@ -16,9 +16,3 @@
    [:div
     [:h1 "Buy Simplection"]
     [:h3 "Or Upgrade Existing Plan"]]))
-
-(defn start-now []
-  (layout
-   [:div
-    [:h2 "Header here"]
-    [:h2 "Image here"]]))

@@ -19,4 +19,7 @@
     [:a {:href "#/reporting"} "Reporting"]]])
 
 (defn layout [content]
-  [:div [header] content [footer]])
+  [:div.full-height
+   [header] 
+   content 
+   [footer]])

@@ -38,7 +38,10 @@
   :aliases {"up" ["pdo" "run," "cljsbuild" "auto" "dev"]}
 
   :cljsbuild {:builds [{:id "dev"
-                        :source-paths ["src/cljs/simplection/templates" "src/cljs/simplection/views" "src/cljs/simplection" "dev"]
+                        :source-paths ["src/cljs/simplection/templates"
+                                       "src/cljs/simplection/designer"
+                                       "src/cljs/simplection/views"
+                                       "src/cljs/simplection" "dev"]
                         :compiler {:output-to "resources/public/js/app.js"
                                    :output-dir "resources/public/js/out"
                                    :optimizations :none
