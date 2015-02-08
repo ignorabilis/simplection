@@ -1,15 +1,43 @@
 (ns simplection.views.designer
-  (:require [simplection.templates.layout :refer [layout]]))
+  (:require [simplection.templates.layout :refer [layout]]
+            [simplection.designer.core :as controller]))
 
-(defn init-left-menu-measurements []
-  [:div.row {:id "designer-left-menu-measurements"
-             :style {:height "40%"}}
-   "Measurements"])
+(defn init-left-menu-search []
+  [:div.row {:id "designer-left-menu-search"
+             :style {:height "5%"}}
+   [:input.col-xs-12 {:type "text"
+                      :value @controller/search-term
+                      :on-change #(reset! controller/search-term (-> % .-target .-value))
+                      :placeholder "Filter2"
+                      :on-key-down #(case (.-which %)
+                                      27 (reset! controller/search-term "")
+                                      nil)}]])
+
+(defn case-insensitive-search [query collection]
+  (if (empty? query) collection
+    (let [q (.toLowerCase query)]
+      (filter #(not= -1 (.indexOf (.toLowerCase %) q))
+              collection))))
+  
+(defn init-left-menu-measures []
+  (let [query @controller/search-term
+        measures @controller/measures]
+    [:div.row {:id "designer-left-menu-measures"
+               :style {:height "40%"}}
+     [:h4 "Measures"]
+     [:ul
+      (for [m (case-insensitive-search query measures)]
+        [:li m])]]))
 
 (defn init-left-menu-dimensions []
+   (let [query @controller/search-term
+        dimensions @controller/dimensions]
   [:div.row {:id "designer-left-menu-dimensions"
-             :style {:height "40%"}}
-   "Dimensions"])
+             :style {:height "35%"}}
+   [:h4 "Dimensions"]
+   [:ul
+      (for [m (case-insensitive-search query dimensions)]
+        [:li m])]]))
 
 (defn init-left-menu-it []
   [:div.row {:id "designer-left-menu-it"
@@ -18,7 +46,8 @@
 
 (defn init-left-menu []
   [:div.col-xs-2.full-height {:id "designer-left-menu"}
-   (init-left-menu-measurements)
+   (init-left-menu-search)
+   (init-left-menu-measures)
    (init-left-menu-dimensions)
    (init-left-menu-it)])
 
