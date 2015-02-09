@@ -1,5 +1,5 @@
 (ns simplection.views.designer
-  (:require [simplection.templates.layout :refer [layout]]
+  (:require [simplection.templates.layout :as layout :refer [layout]]
             [simplection.designer.core :as controller]))
 
 (defn init-left-menu-search []
@@ -8,7 +8,8 @@
    [:input.col-xs-12 {:type "text"
                       :value @controller/search-term
                       :on-change #(reset! controller/search-term (-> % .-target .-value))
-                      :placeholder "Filter2"
+                      :placeholder "Filter Measures / Dimensions"
+                      :style {:height "100%"}
                       :on-key-down #(case (.-which %)
                                       27 (reset! controller/search-term "")
                                       nil)}]])
@@ -18,7 +19,7 @@
     (let [q (.toLowerCase query)]
       (filter #(not= -1 (.indexOf (.toLowerCase %) q))
               collection))))
-  
+
 (defn init-left-menu-measures []
   (let [query @controller/search-term
         measures @controller/measures]
@@ -30,19 +31,32 @@
         [:li m])]]))
 
 (defn init-left-menu-dimensions []
-   (let [query @controller/search-term
+  (let [query @controller/search-term
         dimensions @controller/dimensions]
-  [:div.row {:id "designer-left-menu-dimensions"
-             :style {:height "35%"}}
-   [:h4 "Dimensions"]
-   [:ul
+    [:div.row {:id "designer-left-menu-dimensions"
+               :style {:height "35%"}}
+     [:h4 "Dimensions"]
+     [:ul
       (for [m (case-insensitive-search query dimensions)]
         [:li m])]]))
 
 (defn init-left-menu-it []
   [:div.row {:id "designer-left-menu-it"
              :style {:height "20%"}}
-   "IT"])
+   [:h4 {:style {:height "20%"
+                 :margin "0"}}
+    "IT" ]
+   [:textarea {:id "designer-left-menu-it-textarea"
+               :placeholder "File your reqest to IT here"
+               :style {:height "80%"
+                       :resize "none"
+                       :width "100%"}
+               :on-key-up #(case (.-which %)
+                             27 (set! (-> % .-target .-value) "")
+                             13 (do (set! (-> % .-target .-value) "")
+                                     (layout/show-notification "Your request has been sent." :success)
+                                     );TODO: send data to back-end
+                             nil)}]])
 
 (defn init-left-menu []
   [:div.col-xs-2.full-height {:id "designer-left-menu"}
@@ -72,7 +86,10 @@
 (defn init-right-menu-graph-types []
   [:div.row {:id "designer-right-menu-graph-types"
              :style {:height "60%"}}
-   "Graph Types"])
+   [:h4 "Graph Types"]
+   [:h4 {:class "draggable-chart-item"} "Gant chart"]
+   [:h4 {:class "draggable-chart-item"} "Bar chart"]
+   [:h4 {:class "draggable-chart-item"} "Pie chart"]])
 
 (defn init-right-menu-settings []
   [:div.row {:id "designer-right-menu-settings"
@@ -86,7 +103,7 @@
 
 (defn designer-init []
   (layout
-    [:div.container-fluid {:id "designer-container"}
+    [:div.container-fluid.row {:id "designer-container"}
      [:div.row-fluid.full-height
       (init-left-menu)
       (init-center)

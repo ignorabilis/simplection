@@ -23,7 +23,8 @@
                  [reagent-utils "0.1.2"]
                  [http-kit "2.0.0"]
                  [figwheel "0.2.3-SNAPSHOT"]
-                 [secretary "1.2.1"]]
+                 [secretary "1.2.1"]
+                 [jayq "2.5.4"]]
 
   :profiles {:dev
              {:dependencies [[criterium "0.4.3"]
