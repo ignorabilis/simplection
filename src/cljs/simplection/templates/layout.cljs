@@ -31,6 +31,6 @@
               :success "#success-message-div"
               nil)]
   (-> ($/$ sel)
-      ($/fade-in 200)
-      ($/fade-out 3000)
+      ($/fade-in 500)
+      ($/fade-out 3500)
       ($/html message))))

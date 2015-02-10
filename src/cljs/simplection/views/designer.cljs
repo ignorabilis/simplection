@@ -28,7 +28,8 @@
      [:h4 "Measures"]
      [:ul
       (for [m (case-insensitive-search query measures)]
-        [:li m])]]))
+        [:li {:draggable true }
+         m])]]))
 
 (defn init-left-menu-dimensions []
   (let [query @controller/search-term
@@ -38,7 +39,8 @@
      [:h4 "Dimensions"]
      [:ul
       (for [m (case-insensitive-search query dimensions)]
-        [:li m])]]))
+        [:li {:draggable true }
+         m])]]))
 
 (defn init-left-menu-it []
   [:div.row {:id "designer-left-menu-it"
@@ -83,13 +85,21 @@
     (init-center-rows-container)
     (init-center-plot-area)]])
 
-(defn init-right-menu-graph-types []
-  [:div.row {:id "designer-right-menu-graph-types"
+(defn init-right-menu-chart-types []
+  [:div.row {:id "designer-right-menu--types"
              :style {:height "60%"}}
-   [:h4 "Graph Types"]
-   [:h4 {:class "draggable-chart-item"} "Gant chart"]
-   [:h4 {:class "draggable-chart-item"} "Bar chart"]
-   [:h4 {:class "draggable-chart-item"} "Pie chart"]])
+   [:h4 "Chart Types"]
+   (let [c-types @controller/chart-types]
+     [:div.container-fluid {:style {:padding "0"}}
+      (for [mod '(0 1 2)]
+        [:div.col-md-4
+         (for [t (take-nth 3 (drop mod c-types))]
+           [:button {:value t
+                     :class "draggable-chart-item"
+                     :on-click: #(js/console.log (-> % .-target -.value))
+                     :style {:width "70px"
+                             :margin "4px 0 0 0"}}
+            t])])])])
 
 (defn init-right-menu-settings []
   [:div.row {:id "designer-right-menu-settings"
@@ -98,7 +108,7 @@
 
 (defn init-right-menu []
   [:div.col-xs-2.full-height {:id "designer-right-menu"} 
-   (init-right-menu-graph-types)
+   (init-right-menu-chart-types)
    (init-right-menu-settings)])
 
 (defn designer-init []
