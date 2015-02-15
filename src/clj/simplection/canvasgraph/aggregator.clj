@@ -1,13 +1,38 @@
-(ns simplection.aggregation)
+(ns simplection.canvasgraph.aggregator)
+
+(def table-to-organize (atom []))
 
 (defn grouping
-  "Group by categories"
+  "When grouping just take the first element since they are all the same."
+  [args]
+  (first args))
+
+(defn series-grouping
+  "Group by series"
   [& args]
-  (first (vec args)))
+  (grouping args))
+
+(defn category-grouping
+  "Group by category"
+  [& args]
+  (grouping args))
 
 (defn keys-by-value
+  "Get keys by a given value."
   [hm v]
   (filter (comp #{v} hm) (keys hm)))
+
+(defn select-keys-rest
+  "Select all the keys not specified in the seq."
+  [hm k-seq]
+  (into '()
+  (clojure.set/difference (set (keys hm)) k-seq)))
+
+(def organize-rules {:DC category-grouping :DO series-grouping :DY1 + :DY2 +})
+(def categories (keys-by-value organize-rules category-grouping))
+(def series (keys-by-value organize-rules series-grouping))
+(def groupings (concat categories series))
+(def aggregates (select-keys-rest organize-rules groupings))
 
 (defn filter-table-columns
   "Filter the table by columns."
@@ -26,7 +51,7 @@
   (group-by #(select-keys % column-names) table))
 
 (defn merge-with-multiple-aggregates
-  ""
+  "Merges maps by using a map which specifies each column merge option."
   [table-section aggregates]
   (zipmap
    (keys aggregates)
@@ -45,5 +70,5 @@
   (aggregate-table
    (group-table
     (filter-table-columns table-to-organize (keys organization-map))
-    (keys-by-value organization-map grouping))
+    groupings)
    organization-map))

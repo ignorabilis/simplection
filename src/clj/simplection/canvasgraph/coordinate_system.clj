@@ -1,4 +1,4 @@
-(ns simplection.canvasgraph.coordinate-systems)
+(ns simplection.canvasgraph.coordinate-system)
 
 (defprotocol PCoordinateSystem
   (generate-coordinates [this]))
@@ -7,14 +7,14 @@
 
 (extend-protocol PCoordinateSystem
   Cartesian
-  (generate-coordinates [{coll-axis :coll-axis size :size}] 
+  (generate-coordinates [{coll-axis :coll-axis size :size}]
     ))
 
 (defrecord Polar[coll-axis coordinates-range])
 
 (extend-protocol PCoordinateSystem
   Polar
-  (generate-coordinates [{coll-axis :coll-axis size :size}] 
+  (generate-coordinates [{coll-axis :coll-axis size :size}]
     ))
 
 (defn normalize-angle
