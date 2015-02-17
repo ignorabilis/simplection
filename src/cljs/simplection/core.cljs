@@ -12,7 +12,6 @@
 
 ;; -------------------------
 ;; Views
-
 (defn current-page []
   [(session/get :current-page)])
 

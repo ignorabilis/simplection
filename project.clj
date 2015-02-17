@@ -1,12 +1,13 @@
 (defproject simplection "0.1.0-SNAPSHOT"
   :description "The core of the Simplection Business Analytics Cloud."
   :url "http://localhost:3000/"
-  :source-paths ["src" "src/clj"]
+  :source-paths ["src/clj" "src_generated/clj"]
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :min-lein-version "2.5.0"
   :uberjar-name "uber.simplection.jar"
+  :auto-clean false
   :clean-targets ^{:protect false} ["resources/public/js/out"]
   :main simplection.server.core
 
@@ -26,23 +27,34 @@
                  [secretary "1.2.1"]
                  [jayq "2.5.4"]]
 
-  :profiles {:dev
-             {:dependencies [[criterium "0.4.3"]
-                             [midje "1.6.3"]
-                             [javax.servlet/servlet-api "2.5"]]}}
-
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-ring "0.8.13"]
             [lein-pdo "0.1.1"]
             [lein-figwheel "0.2.3-SNAPSHOT"]]
 
-  :aliases {"up" ["pdo" "run," "cljsbuild" "auto" "dev"]}
+  :profiles {:dev
+             {:dependencies [[criterium "0.4.3"]
+                             [midje "1.6.3"]
+                             [javax.servlet/servlet-api "2.5"]]
+              :plugins [[com.keminglabs/cljx "0.5.0"]]}}
+
+  :aliases {"up" ["pdo" "run," "cljsbuild" "auto" "dev"]
+            "interactive" [""]}
+  :cljx {:builds [{:source-paths ["src/cljx"]
+                   :output-path "src_generated/clj"
+                   :rules :clj}
+
+                  {:source-paths ["src/cljx"]
+                   :output-path "src_generated/cljs"
+                   :rules :cljs}]}
 
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs/simplection/templates"
                                        "src/cljs/simplection/designer"
                                        "src/cljs/simplection/views"
-                                       "src/cljs/simplection" "dev"]
+                                       "src/cljs/simplection"
+                                       "src_generated/cljs"
+                                       "dev/simplection"]
                         :compiler {:output-to "resources/public/js/app.js"
                                    :output-dir "resources/public/js/out"
                                    :optimizations :none
