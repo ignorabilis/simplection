@@ -39,7 +39,8 @@
               :plugins [[com.keminglabs/cljx "0.5.0"]]}}
 
   :aliases {"up" ["pdo" "run," "cljsbuild" "auto" "dev"]
-            "interactive" [""]}
+            "interactive" ["pdo" "run," "cljsbuild" "auto" "dev," "cljx" "auto," "figwheel"]}
+
   :cljx {:builds [{:source-paths ["src/cljx"]
                    :output-path "src_generated/clj"
                    :rules :clj}

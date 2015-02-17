@@ -29,7 +29,7 @@
 
 (defn -main [& args]
   (let [port (Integer/parseInt
-               (or (System/getenv "PORT") "3449"))]
+               (or (System/getenv "PORT") "3450"))]
     (run-server application {:port port :join? false})))
 
 (future (loop []
