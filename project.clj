@@ -19,6 +19,7 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [cljs-http "0.1.21"]
                  [hiccup "1.0.5"]
+                 [hiccups "0.3.0"]
                  [garden "1.2.5"]
                  [reagent "0.5.0-alpha"]
                  [reagent-utils "0.1.2"]

@@ -1,6 +1,6 @@
 (ns simplection.preview.aggstack
-  (:require [simplection.canvasgraph.aggregator :refer :all])
-  (:require [simplection.canvasgraph.series-orderer :refer :all]))
+  (:require [simplection.canvasgraph.aggregator :refer :all]
+            [simplection.canvasgraph.series-orderer :refer :all]))
 
 ;; Aggregate values for each group
 ;; a main 560 260

@@ -1,2 +1,0 @@
-(ns simplection.canvasgraph.core)
-
