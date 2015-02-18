@@ -76,7 +76,7 @@
   [:div.col-xs-2.full-height {:id "designer-center-rows-container" } "Rows"])
 
 (defn init-center-plot-area []
-  [:div.col-xs-10.full-height {:id "designer-center-plot-area"} "Plot Area"])
+  [:div.col-xs-10.full-height {:id "designer-center-plot-area"} @controller/graph])
 
 (defn init-center []
   [:div.col-xs-8.full-height {:id "designer-center"}
@@ -107,7 +107,7 @@
    "Settings"])
 
 (defn init-right-menu []
-  [:div.col-xs-2.full-height {:id "designer-right-menu"} 
+  [:div.col-xs-2.full-height {:id "designer-right-menu"}
    (init-right-menu-chart-types)
    (init-right-menu-settings)])
 
