@@ -28,9 +28,10 @@
                  [secretary "1.2.1"]
                  [jayq "2.5.4"]]
 
-  :plugins [[lein-cljsbuild "1.0.3"]
+  :plugins [[lein-pdo "0.1.1"]
             [lein-ring "0.8.13"]
-            [lein-pdo "0.1.1"]
+            [lein-garden "0.2.5"]
+            [lein-cljsbuild "1.0.3"]
             [lein-figwheel "0.2.3-SNAPSHOT"]]
 
   :profiles {:dev
@@ -40,7 +41,7 @@
               :plugins [[com.keminglabs/cljx "0.5.0"]]}}
 
   :aliases {"up" ["pdo" "run," "cljsbuild" "auto" "dev"]
-            "interactive" ["pdo" "run," "cljsbuild" "auto" "dev," "cljx" "auto," "figwheel"]}
+            "interactive" ["pdo" "run," "cljsbuild" "auto" "dev," "cljx" "auto," "garden" "auto," "figwheel"]}
 
   :cljx {:builds [{:source-paths ["src/cljx"]
                    :output-path "src_generated/clj"
@@ -49,6 +50,12 @@
                   {:source-paths ["src/cljx"]
                    :output-path "src_generated/cljs"
                    :rules :cljs}]}
+
+  :garden {:builds [{:id "screen"
+                     :source-paths ["src/css"]
+                     :stylesheet app/app
+                     :compiler {:output-to "resources/public/css/app.css"
+                                :pretty-print? false}}]}
 
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs/simplection/templates"
