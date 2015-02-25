@@ -3,11 +3,13 @@
 (defprotocol PCoordinateSystem
   (generate-coordinates [this]))
 
-(defrecord Cartesian[coll-axis size])
+(defrecord Cartesian[table key-pairs])
 
 (extend-protocol PCoordinateSystem
   Cartesian
-  (generate-coordinates [{coll-axis :coll-axis size :size}]))
+  (generate-coordinates [{table :table key-pairs :key-pairs}]
+    (for [k-p key-pairs]
+      (map #(identity [(% (first k-p)) (% (last k-p))]) table))))
 
 (defrecord Polar[coll-axis coordinates-range])
 

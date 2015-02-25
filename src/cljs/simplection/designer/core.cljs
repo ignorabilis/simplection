@@ -3,17 +3,40 @@
             [jayq.core :as $]
             [simplection.canvasgraph.coordinate-system :as cs]
             [simplection.canvasgraph.path :as p]
-            [simplection.report :as r]))
+            [simplection.report :as rep]
+            [simplection.canvasgraph.aggregator :as agg]
+            [simplection.canvasgraph.aggregates :as ags]
+            [simplection.canvasgraph.data :as g-data]
+            [simplection.canvasgraph.series-orderer :as so]
+            [simplection.range :as ran])
+  (:require-macros [simplection.core :as cr]))
 
 (def search-term (atom ""))
 (def measures (atom ["X1", "X2", "Y1", "Y2"]))
 (def dimensions (atom ["D1", "D2", "CD1", "CD2"]))
-(def chart-types (atom ["Gant", "Pie", "Bar", "Line", "Scatter", "Funnel"]))
+(def chart-types (atom ["Gantt", "Pie", "Bar", "Line", "Scatter", "Funnel"]))
 
 
 
 
 ;; TESTING!
+(def ext-test (cr/cs-resolver))
+(def cart-test (:a (assoc-in (:Cartesian ext-test) [:a] 22)))
+
+(reset! g-data/table-to-organize [{:DO "a" :DC "main" :DY1 120 :DY2 0}
+                                  {:DO "b" :DC "gene" :DY1 40  :DY2 40}
+                                  {:DO "b" :DC "main" :DY1 50  :DY2 80}
+                                  {:DO "b" :DC "gene" :DY1 10  :DY2 10}
+                                  {:DO "a" :DC "main" :DY1 90  :DY2 60}
+                                  {:DO "a" :DC "main" :DY1 100 :DY2 60}
+                                  {:DO "b" :DC "gene" :DY1 20  :DY2 60}
+                                  {:DO "a" :DC "main" :DY1 80  :DY2 30}
+                                  {:DO "a" :DC "main" :DY1 90  :DY2 90}
+                                  {:DO "a" :DC "main" :DY1 80  :DY2 20}])
+
+(def coords (ran/table-range-measures so/stacked-table [[:DY2 '(:a)] [:DY1 '(:a)] [:DY1 '(:b)] [:DY2 '(:b)]] [0 1]))
+(def f-part (str coords))
+
 (def test-data-1 (p/Straight. [[[180 455][189 412][199 355][208 381][217 377][226 416][236 407][245 338][254 312][263 282][273 316][282 303][291 325][301 282]
                               [310 273][319 251][328 264][338 247][347 229][356 221][366 273][375 216][384 212][393 208][403 195][412 238][421 229][430 234]
                               [440 242][449 225][458 216][468 195][477 190][486 199][495 186][505 173][514 186][523 203][532 216][542 190][551 177][560 173]
@@ -38,8 +61,8 @@
                               [570 299][579 309][588 316][597 334][607 344][616 354][625 368][634 382][644 386][653 382][662 379][672 368][681 379][690 386]
                               [699 389][709 389][718 393][727 389][737 386][746 389][755 389][764 393][774 393][783 399][792 396][801 375][811 420][820 455]]]))
 
-(def report-1 (r/Report.
-                [(r/ReportItem. (p/generate-data-path test-data-1) "rep-item-1")
-                 (r/ReportItem. (p/generate-data-path test-data-2) "rep-item-2")]))
+(def report-1 (rep/Report.
+                [(rep/ReportItem. (p/generate-data-path test-data-1) "rep-item-1")
+                 (rep/ReportItem. (p/generate-data-path test-data-2) "rep-item-2")]))
 
-(def graph (atom (r/generate-report report-1)))
+(def graph (atom (rep/generate-report report-1)))

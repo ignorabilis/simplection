@@ -70,7 +70,7 @@
 (defn init-center-columns-container []
   [:div.row {:id "designer-center-columns-container"
              :style {:height "20%"}}
-   "Columns"])
+   controller/f-part])
 
 (defn init-center-rows-container []
   [:div.col-xs-2.full-height {:id "designer-center-rows-container" } "Rows"])
