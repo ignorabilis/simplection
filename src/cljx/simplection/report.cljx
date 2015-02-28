@@ -1,8 +1,10 @@
 (ns simplection.report
   #+clj
-  (:require [hiccup.core :as hic])
+  (:require [clojure.string :as string]
+            [hiccup.core :as hic])
   #+cljs
-  (:require [hiccups.runtime :as hic-runtime])
+  (:require [clojure.string :as string]
+            [hiccups.runtime :as hic-runtime])
   #+cljs
   (:require-macros [hiccups.core :as hic]))
 
@@ -10,7 +12,7 @@
   "Convert geometry instructions to svg path"
   [geo]
   (for [path geo]
-    [:path {:d (clojure.string/join " " path)}]))
+    [:path {:d (string/join " " path)}]))
 
 (defn generate-item
   [item]

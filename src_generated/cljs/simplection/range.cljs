@@ -27,12 +27,13 @@
     (map #(- new-max (/ (- old-max %) k)) coll-old-values)))
 
 (defn offset-range
-  "Converts data range to coordinates range."
+  "Converts data range to a new range with an offset."
   [[original-min original-max] categories-count]
   (let [step (/ original-max (* 2 categories-count))]
     [(+ original-min step) (- original-max step)]))
 
 (defn range-dimensions
+  "Converts categories to numeric range."
   [table coordinates-range]
   (let [categories-count (count table)
           categories-range [1 categories-count]

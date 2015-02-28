@@ -1,34 +1,22 @@
 (ns simplection.canvasgraph.scale
-  (:require [simplection.range :as ran]
-            [simplection.hashmap-ext :as hme]
-            [simplection.canvasgraph.series-orderer :as so]
-            [simplection.canvasgraph.definition :as definition]))
-
-(def aggregate-keys (hme/select-keys-rest (first so/stacked-table) definition/categories))
+  (:require [simplection.canvasgraph.series :as series]
+            [simplection.canvasgraph.definition :as definition]
+            [simplection.canvasgraph.ascale :as ascale]
+     #+cljs [simplection.canvasgraph.ascale :refer [Category Numeric]])
+  (#+clj :require #+cljs :require-macros [simplection.core :as cr])
+  #+clj (:import [simplection.canvasgraph.ascale Category Numeric]))
 
 (def coordinates-range
-  "0-1 range is used and then the Graph is scaled in svg."
+  "0-1 range is used then the resulting vector is scaled."
   [0 1])
 
-(defprotocol PScale
-  (generate-coordinates [this]))
+(defn apply-scaling
+  [table scale]
+  (let [scale-record ((definition/get-type scale) (cr/scale-resolver))]
+      (ascale/generate-coordinates scale-record table coordinates-range)))
 
-(defrecord Category[table category-keys])
+(defn scale-data
+  [table coordinates-range]
+  (reduce apply-scaling table (definition/get-data-scaling)))
 
-(extend-protocol PScale
-  Category
-  (generate-coordinates [{table :table category-keys :category-keys}]
-    ))
-
-(defrecord Numeric[table aggregate-keys])
-
-(extend-protocol PScale
-  Numeric
-  (generate-coordinates [{table :table aggregate-keys :aggregate-keys}]
-    (ran/table-range-measures table aggregate-keys coordinates-range)))
-
-
-;; pull definition from table definition; generate-coordinates based on definition
-#_(def scaled-table (table-range-measures
-                   (table-range-dimensions so/stacked-table category-keys)
-                   aggregate-keys))
+(def scaled-table (scale-data series/stacked-table coordinates-range))

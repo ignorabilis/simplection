@@ -1,6 +1,7 @@
 (ns simplection.core
   (:require [clojure.string :as string]
-            [simplection.canvasgraph.coordinate-system :as cs]))
+            [simplection.canvasgraph.ascale :as scale])
+  (:import [simplection.canvasgraph.ascale Category Numeric]))
 
 (defn record-mapper
   [hm record-class]
@@ -8,12 +9,12 @@
         full-name (class-map :canonicalName)
         r-name (class-map :simpleName)
         r-ns (string/replace full-name (str "." r-name) "")]
-    (conj hm [(keyword r-name) `(~(symbol r-ns (str "->" r-name)))])))
+    (conj hm [(keyword (string/lower-case r-name)) `(~(symbol r-ns (str "->" r-name)))])))
 
 (defn record-factory
   [proto]
   (reduce record-mapper {} (extenders proto)))
 
-(defmacro cs-resolver
+(defmacro scale-resolver
   []
-  (record-factory cs/PCoordinateSystem))
+  (record-factory scale/PScale))
