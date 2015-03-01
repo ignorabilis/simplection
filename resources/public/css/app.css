@@ -25,5 +25,5 @@ html,body,.full-height
 
 .highlighted
 {
-	background-color:hsla(0,33.333332%,29.411764%,0.2) !important;
+	border-color:hsla(0,33.333332%,29.411764%,0.2) !important;
 }

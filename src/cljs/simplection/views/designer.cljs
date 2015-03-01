@@ -1,6 +1,18 @@
 (ns simplection.views.designer
   (:require [simplection.templates.layout :as layout :refer [layout]]
-            [simplection.designer.core :as controller]))
+            [simplection.designer.core :as controller]
+            [jayq.core :as $]))
+
+(defn format-measure-dimension [obj]
+  (if (nil? (:aggregate obj))
+    (:displayValue obj)
+    (str (:aggregate obj) "(" (:displayValue obj) ")")))
+
+(defn case-insensitive-search [query collection]
+  (if (empty? query) collection
+    (let [q (.toLowerCase query)]
+      (filter #(not= -1 (.indexOf (.toLowerCase (% :displayValue)) q))
+              collection))))
 
 (defn init-left-menu-search []
   [:div.row {:id "designer-left-menu-search"
@@ -13,12 +25,6 @@
                       :on-key-down #(case (.-which %)
                                       27 (reset! controller/search-term "")
                                       nil)}]])
-
-(defn case-insensitive-search [query collection]
-  (if (empty? query) collection
-    (let [q (.toLowerCase query)]
-      (filter #(not= -1 (.indexOf (.toLowerCase (% :displayValue)) q))
-              collection))))
 
 (defn init-left-menu-measures []
   (let [query @controller/search-term
@@ -34,8 +40,12 @@
                   :on-click #(.preventDefault %)
                   :on-drag-start #(let [dt (.-dataTransfer %)]
                                     (do (.setData dt "type" "measure")
-                                      (.setData dt "value" (:value m))
-                                      (.setData dt "displayValue" (:displayValue m))))}
+                                        (.setData dt "value" (:value m))
+                                        (.setData dt "displayValue" (:displayValue m))
+                                        ($/css ($/$ "#column-aggregate-holder") "display" "")
+                                        ($/css ($/$ "#row-aggregate-holder") "display" "")))
+                  :on-drag-end #(do ($/css ($/$ "#column-aggregate-holder") "display" "none")
+                                    ($/css ($/$ "#row-aggregate-holder") "display" "none"))}
               (:displayValue m)]])]]))
 
 (defn init-left-menu-dimensions []
@@ -51,8 +61,12 @@
                   :on-click #(.preventDefault %)
                   :on-drag-start #(let [dt (.-dataTransfer %)]
                                     (do (.setData dt "type" "dimension")
-                                      (.setData dt "value" (:value m))
-                                      (.setData dt "displayValue" (:displayValue m))))}
+                                        (.setData dt "value" (:value m))
+                                        (.setData dt "displayValue" (:displayValue m))
+                                        ($/css ($/$ "#column-aggregate-holder") "display" "")
+                                        ($/css ($/$ "#row-aggregate-holder") "display" "")))
+                  :on-drag-end #(do ($/css ($/$ "#column-aggregate-holder") "display" "none")
+                                    ($/css ($/$ "#row-aggregate-holder") "display" "none"))}
               (:displayValue m)]])]]))
 
 (defn init-left-menu-it []
@@ -86,38 +100,58 @@
              :on-drag-enter #(do 
                                (.preventDefault %)
                                (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+                               (set! (.-effectAllowed (.-dataTransfer %)) "copy")
                                (.add (-> % .-target .-classList) "highlighted"))
              :on-drag-leave #(do
                                (.preventDefault %)
-                               (.remove (-> % .-target .-classList) "highlighted"))
+                               (.remove (-> % .-target .-classList) "highlighted")
+                               )
              :on-drop #(let [dt (.-dataTransfer %)
                              t (.getData dt "type")
                              val (.getData dt "value")
-                             dVal (.getData dt "displayValue")]
+                             dVal (.getData dt "displayValue")
+                             aggr (-> % .-target .-dataset .-aggr)]
                          (do
-                           (swap! controller/selected-columns conj {:value val :displayValue dVal})
+                           (swap! controller/selected-columns conj {:value val :displayValue dVal :aggregate aggr})
                            (.remove (-> % .-target .-classList) "highlighted")))
              :on-drag-over #(.preventDefault %) }
-   [:div 
-    [:div "Columns"]
-    (for [m @controller/selected-columns]
-      [:div
-       {:style {:display "inline-block"
-                :margin-left "5px"
-                :padding "5px"}}
-       [:span (:displayValue m)]
-       [:a {:href "#"
-            :on-click #(do
-                         (swap! controller/selected-columns clojure.set/difference #{m})
-                         (.preventDefault %))
-            :style {:float "right"
-                    :margin-left "30px"
-                    :font-weight "bold"}}
-        "X"]])]])
+   [:div {:style {:height "100%"}}
+    [:div {:style {:height "20%"}} "Columns"]
+    [:div {:style {:position "relative" :height "80%"}}
+     (for [m @controller/selected-columns]
+       [:div
+        {:style {:display "inline-block"
+                 :margin-left "5px"
+                 :padding "5px"}}
+        [:span (format-measure-dimension m)]
+        [:a {:href "#"
+             :on-click #(do
+                          (swap! controller/selected-columns clojure.set/difference #{m})
+                          (.preventDefault %))
+             :style {:float "right"
+                     :margin-left "30px"
+                     :font-weight "bold"}}
+         "X"]])
+     [:div  {:id "column-aggregate-holder"
+             :style {:position "absolute"
+                     :top "0"
+                     :margin "0"
+                     :background-color "white"
+                     :padding "0px"
+                     :height "100%"
+                     :width "100%"
+                     :display "none"}}
+      (for [aggr @controller/aggregates]
+        [:div {:data-aggr aggr
+               :style {:display "inline-block"
+                       :padding "15px"}}
+         aggr])]]
+    ]])
 
 (defn init-center-rows-container []
   [:div.col-xs-2.full-height 
    {:id "designer-center-rows-container"
+    :style {:padding "0"}
     :on-drag-enter #(do 
                       (.preventDefault %)
                       (set! (.-effectAllowed (.-dataTransfer %)) "copy")
@@ -128,22 +162,36 @@
     :on-drop #(let [dt (.-dataTransfer %)
                     t (.getData dt "type")
                     val (.getData dt "value")
-                             dVal (.getData dt "displayValue")]
+                    dVal (.getData dt "displayValue")
+                    aggr (-> % .-target .-dataset .-aggr)]
                 (do
-                  (swap! controller/selected-rows conj {:value val :displayValue dVal})
+                  (swap! controller/selected-rows conj {:value val :displayValue dVal :aggregate aggr})
                   (.remove (-> % .-target .-classList) "highlighted")))
     :on-drag-over #(.preventDefault %) }
    [:div 
     [:div "Rows"]
     (for [m @controller/selected-rows]
-      [:div (:displayValue m)
+      [:div (format-measure-dimension m)
        [:a {:href "#"
             :on-click #(do
                          (swap! controller/selected-rows clojure.set/difference #{m})
                          (.preventDefault %))
             :style {:float "right"
                     :font-weight "bold"}}
-        "X"]])]])
+        "X"]])]
+   [:div  {:id "row-aggregate-holder"
+           :style {:position "absolute"
+                   :background-color "white"
+                   :top "0px"
+                   :margin "0"
+                   :width "100%"
+                   :height "100%"
+                   :display "none"}}
+    (for [aggr @controller/aggregates]
+      [:div {:data-aggr aggr
+             :style {:padding "15px"}}
+       aggr])]
+   ])
 
 (defn init-center-plot-area []
   [:div.col-xs-10.full-height {:id "designer-center-plot-area"} @controller/graph])
