@@ -12,10 +12,20 @@
             [simplection.canvasgraph.scale :as scale]))
 
 (def search-term (atom ""))
-(def measures (atom ["X1", "X2", "Y1", "Y2"]))
-(def dimensions (atom ["D1", "D2", "CD1", "CD2"]))
-(def chart-types (atom ["Gantt", "Pie", "Bar", "Line", "Scatter", "Funnel"]))
 
+(def measures (atom [{:displayValue "X1" :value "X1"}
+                     {:displayValue "X2" :value "X2"}
+                     {:displayValue "Y1" :value "Y1"}
+                     {:displayValue "Y2" :value "Y2"}]))
+
+(def dimensions (atom [{:displayValue "D1" :value "D1"}
+                       {:displayValue "D2" :value "D2"}
+                       {:displayValue "CD1" :value "CD1"}
+                       {:displayValue "CD2" :value "CD2"}]))
+
+(def chart-types (atom ["Gantt", "Pie", "Bar", "Line", "Scatter", "Funnel"]))
+(def selected-rows (atom #{}))
+(def selected-columns (atom #{}))
 
 
 

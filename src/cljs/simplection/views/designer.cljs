@@ -17,7 +17,7 @@
 (defn case-insensitive-search [query collection]
   (if (empty? query) collection
     (let [q (.toLowerCase query)]
-      (filter #(not= -1 (.indexOf (.toLowerCase %) q))
+      (filter #(not= -1 (.indexOf (.toLowerCase (% :displayValue)) q))
               collection))))
 
 (defn init-left-menu-measures []
@@ -28,8 +28,15 @@
      [:h4 "Measures"]
      [:ul
       (for [m (case-insensitive-search query measures)]
-        [:li {:draggable true }
-         m])]]))
+        [:li [:a {:href "#"
+                  :data-dimension true
+                  :draggable true
+                  :on-click #(.preventDefault %)
+                  :on-drag-start #(let [dt (.-dataTransfer %)]
+                                    (do (.setData dt "type" "measure")
+                                      (.setData dt "value" (:value m))
+                                      (.setData dt "displayValue" (:displayValue m))))}
+              (:displayValue m)]])]]))
 
 (defn init-left-menu-dimensions []
   (let [query @controller/search-term
@@ -39,8 +46,14 @@
      [:h4 "Dimensions"]
      [:ul
       (for [m (case-insensitive-search query dimensions)]
-        [:li {:draggable true }
-         m])]]))
+         [:li [:a {:href "#"
+                  :draggable true
+                  :on-click #(.preventDefault %)
+                  :on-drag-start #(let [dt (.-dataTransfer %)]
+                                    (do (.setData dt "type" "dimension")
+                                      (.setData dt "value" (:value m))
+                                      (.setData dt "displayValue" (:displayValue m))))}
+              (:displayValue m)]])]]))
 
 (defn init-left-menu-it []
   [:div.row {:id "designer-left-menu-it"
@@ -69,11 +82,68 @@
 
 (defn init-center-columns-container []
   [:div.row {:id "designer-center-columns-container"
-             :style {:height "20%"}}
-   controller/f-part])
+             :style {:height "20%"}
+             :on-drag-enter #(do 
+                               (.preventDefault %)
+                               (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+                               (.add (-> % .-target .-classList) "highlighted"))
+             :on-drag-leave #(do
+                               (.preventDefault %)
+                               (.remove (-> % .-target .-classList) "highlighted"))
+             :on-drop #(let [dt (.-dataTransfer %)
+                             t (.getData dt "type")
+                             val (.getData dt "value")
+                             dVal (.getData dt "displayValue")]
+                         (do
+                           (swap! controller/selected-columns conj {:value val :displayValue dVal})
+                           (.remove (-> % .-target .-classList) "highlighted")))
+             :on-drag-over #(.preventDefault %) }
+   [:div 
+    [:div "Columns"]
+    (for [m @controller/selected-columns]
+      [:div
+       {:style {:display "inline-block"
+                :margin-left "5px"
+                :padding "5px"}}
+       [:span (:displayValue m)]
+       [:a {:href "#"
+            :on-click #(do
+                         (swap! controller/selected-columns clojure.set/difference #{m})
+                         (.preventDefault %))
+            :style {:float "right"
+                    :margin-left "30px"
+                    :font-weight "bold"}}
+        "X"]])]])
 
 (defn init-center-rows-container []
-  [:div.col-xs-2.full-height {:id "designer-center-rows-container" } "Rows"])
+  [:div.col-xs-2.full-height 
+   {:id "designer-center-rows-container"
+    :on-drag-enter #(do 
+                      (.preventDefault %)
+                      (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+                      (.add (-> % .-target .-classList) "highlighted"))
+    :on-drag-leave #(do
+                      (.preventDefault %)
+                      (.remove (-> % .-target .-classList) "highlighted"))
+    :on-drop #(let [dt (.-dataTransfer %)
+                    t (.getData dt "type")
+                    val (.getData dt "value")
+                             dVal (.getData dt "displayValue")]
+                (do
+                  (swap! controller/selected-rows conj {:value val :displayValue dVal})
+                  (.remove (-> % .-target .-classList) "highlighted")))
+    :on-drag-over #(.preventDefault %) }
+   [:div 
+    [:div "Rows"]
+    (for [m @controller/selected-rows]
+      [:div (:displayValue m)
+       [:a {:href "#"
+            :on-click #(do
+                         (swap! controller/selected-rows clojure.set/difference #{m})
+                         (.preventDefault %))
+            :style {:float "right"
+                    :font-weight "bold"}}
+        "X"]])]])
 
 (defn init-center-plot-area []
   [:div.col-xs-10.full-height {:id "designer-center-plot-area"} @controller/graph])
