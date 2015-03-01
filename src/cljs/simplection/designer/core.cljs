@@ -24,6 +24,7 @@
                        {:displayValue "CD2" :value "CD2"}]))
 
 (def chart-types (atom ["Gantt", "Pie", "Bar", "Line", "Scatter", "Funnel"]))
+(def selected-chart-type (atom ""))
 (def selected-rows (atom #{}))
 (def selected-columns (atom #{}))
 

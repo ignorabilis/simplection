@@ -158,7 +158,7 @@
 (defn init-right-menu-chart-types []
   [:div.row {:id "designer-right-menu--types"
              :style {:height "60%"}}
-   [:h4 "Chart Types"]
+   [:h4 (str "Chart Type: " @controller/selected-chart-type)]
    (let [c-types @controller/chart-types]
      [:div.container-fluid {:style {:padding "0"}}
       (for [mod '(0 1 2)]
@@ -166,7 +166,7 @@
          (for [t (take-nth 3 (drop mod c-types))]
            [:button {:value t
                      :class "draggable-chart-item"
-                     :on-click: #(js/console.log (-> % .-target -.value))
+                     :on-click #(reset! controller/selected-chart-type t)
                      :style {:width "70px"
                              :margin "4px 0 0 0"}}
             t])])])])
