@@ -97,7 +97,7 @@
 (defn init-center-columns-container []
   [:div.row {:id "designer-center-columns-container"
              :style {:height "20%"}
-             :on-drag-enter #(do 
+             :on-drag-enter #(do
                                (.preventDefault %)
                                (set! (.-effectAllowed (.-dataTransfer %)) "copy")
                                (set! (.-effectAllowed (.-dataTransfer %)) "copy")
@@ -116,7 +116,7 @@
                            (.remove (-> % .-target .-classList) "highlighted")))
              :on-drag-over #(.preventDefault %) }
    [:div {:style {:height "100%"}}
-    [:div {:style {:height "20%"}} "Columns"]
+    [:div {:style {:height "20%"}} controller/f-part]
     [:div {:style {:position "relative" :height "80%"}}
      (for [m @controller/selected-columns]
        [:div
@@ -149,10 +149,10 @@
     ]])
 
 (defn init-center-rows-container []
-  [:div.col-xs-2.full-height 
+  [:div.col-xs-2.full-height
    {:id "designer-center-rows-container"
     :style {:padding "0"}
-    :on-drag-enter #(do 
+    :on-drag-enter #(do
                       (.preventDefault %)
                       (set! (.-effectAllowed (.-dataTransfer %)) "copy")
                       (.add (-> % .-target .-classList) "highlighted"))
@@ -168,7 +168,7 @@
                   (swap! controller/selected-rows conj {:value val :displayValue dVal :aggregate aggr})
                   (.remove (-> % .-target .-classList) "highlighted")))
     :on-drag-over #(.preventDefault %) }
-   [:div 
+   [:div
     [:div "Rows"]
     (for [m @controller/selected-rows]
       [:div (format-measure-dimension m)
