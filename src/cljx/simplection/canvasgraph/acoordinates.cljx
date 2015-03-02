@@ -1,7 +1,7 @@
 (ns simplection.canvasgraph.acoordinates)
 
 (defprotocol PCoordinateSystem
-  (generate-coordinates [this]))
+  (get-coordinates-bounds [this]))
 
 (defrecord Cartesian[])
 (defrecord Polar[])
@@ -9,7 +9,9 @@
 (extend-protocol PCoordinateSystem
 
   Cartesian
-  (generate-coordinates [this])
+  (get-coordinates-bounds [this]
+                          [0 1])
 
-Polar
-  (generate-coordinates [this]))
+  Polar
+  (get-coordinates-bounds [this]
+                          [0 360]))

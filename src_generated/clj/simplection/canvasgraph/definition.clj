@@ -6,9 +6,11 @@
                                      :interpolation "to be implemented"
                                      :aggregate-rules {:DC aggs/category-grouping :DO aggs/series-grouping :DY1 + :DY2 +}
                                      :stack-rules {:type :stack :data [[:DY2 '(:a)] [:DY1 '(:a)] [:DY1 '(:b)] [:DY2 '(:b)]]}
+                                     :coordinate-system {:type :cartesian}
                                      :data-scaling [{:type :category :data [[:DC]]}
                                                     {:type :numeric :data [[:DY2 '(:a)] [:DY1 '(:a)] [:DY1 '(:b)] [:DY2 '(:b)]]}]
                                      :cluster-rules "to be implemented"
+                                     :intersection :cross
                                      :coordinate-systems [{:type :cartesian :intersection :cross :data [0 1]}]
                                      :data-paths [{:type :straight :data [[[:DC] [:DY2 '(:a)]]
                                                                           [[:DC] [:DY1 '(:a)]]
@@ -39,9 +41,13 @@
   (get-in @default-graph-definition [:data-scaling]))
 
 (defn get-coordinate-systems
-  "Get the data scaling rules for the graph."
   []
   (get-in @default-graph-definition [:coordinate-systems]))
+
+(defn get-coordinate-system
+  "Get the coordinate system type for the graph."
+  []
+  (get-in @default-graph-definition [:coordinate-system]))
 
 (defn get-type
   "Get the type that corresponds to a specific record."
