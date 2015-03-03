@@ -43,7 +43,6 @@
      [:ul
       (for [m (case-insensitive-search query measures)]
         [:li [:a {:href "#"
-                  :data-dimension true
                   :draggable true
                   :on-click #(.preventDefault %)
                   :on-drag-start #(let [dt (.-dataTransfer %)]
@@ -65,15 +64,14 @@
          [:li [:a {:href "#"
                   :draggable true
                   :on-click #(.preventDefault %)
-                  :on-drag-start #(let [dt (.-dataTransfer %)]
-                                    (do (.setData dt "type" "dimension")
-                                        (.setData dt "value" (:value m))
-                                        (.setData dt "displayValue" (:displayValue m))
-                                        (js/console.log (get-css-display-value @measure-or-dimensions-dragged?))
-                                        (reset! measure-or-dimensions-dragged? true)
-                                        (js/console.log (get-css-display-value @measure-or-dimensions-dragged?))))
+                  :on-drag-start
+                  #(let [dt (.-dataTransfer %)]
+                     (do (.setData dt "type" "dimension")
+                       (.setData dt "value" (:value m))
+                       (.setData dt "displayValue" (:displayValue m))
+                       (reset! measure-or-dimensions-dragged? true)))
                   :on-drag-end #(reset! measure-or-dimensions-dragged? false)}
-              (:displayValue m)]])]]))
+               (:displayValue m)]])]]))
 
 (defn init-left-menu-it []
   [:div.row.white-border {:id "designer-left-menu-it"
@@ -102,25 +100,7 @@
 
 (defn init-center-columns-container []
   [:div.row.white-border {:id "designer-center-columns-container"
-             :style {:height "40px"}
-             :on-drag-enter #(do 
-                               (.preventDefault %)
-                               (set! (.-effectAllowed (.-dataTransfer %)) "copy")
-                               (set! (.-effectAllowed (.-dataTransfer %)) "copy")
-                               (.add (-> % .-target .-classList) "highlighted"))
-             :on-drag-leave #(do
-                               (.preventDefault %)
-                               (.remove (-> % .-target .-classList) "highlighted")
-                               )
-             :on-drop #(let [dt (.-dataTransfer %)
-                             t (.getData dt "type")
-                             val (.getData dt "value")
-                             dVal (.getData dt "displayValue")
-                             aggr (-> % .-target .-dataset .-aggr)]
-                         (do
-                           (swap! controller/selected-columns conj {:value val :displayValue dVal :aggregate aggr})
-                           (.remove (-> % .-target .-classList) "highlighted")))
-             :on-drag-over #(.preventDefault %) }
+             :style {:height "40px"}}
    [:div {:style {:height "100%"}}
     [:div.col-xs-1 {:style {:height "100%"
                             :width "100px"
@@ -128,7 +108,10 @@
                             :border-right "solid 1px white"
                             :text-align "center"}}
      "Columns :"]
-    [:div.col-xs-11 {:style {:height "100%" :padding "0" :width "calc(100% - 100px)"}}
+    [:div.col-xs-11 {:style {:height "100%"
+                             :position "relative"
+                             :padding "0"
+                             :width "calc(100% - 100px)"}}
      (for [m @controller/selected-columns]
        [:div.white-border
         {:style {:display "inline-block"
@@ -156,49 +139,93 @@
                      :width "100%"
                      :display (get-css-display-value @measure-or-dimensions-dragged?)}}
       (for [aggr @controller/aggregates]
-        [:div.white-border {:data-aggr aggr
-               :style {:display "inline-block"
-                       :margin-left "2px"
-                       :height "38px"
-                       :line-height "28px"
-                       :padding "5px 35px"}}
+        [:div.white-border
+         {:on-drag-enter
+          #(do 
+             (.preventDefault %)
+             (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+             (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+             (.add (-> % .-target .-classList) "highlighted"))
+          :on-drag-leave
+          #(do
+             (.preventDefault %)
+             (.remove (-> % .-target .-classList) "highlighted")
+             )
+          :on-drop
+          #(let [dt (.-dataTransfer %)
+                 t (.getData dt "type")
+                 val (.getData dt "value")
+                 dVal (.getData dt "displayValue")]
+             (do
+               (swap! controller/selected-columns conj {:value val :displayValue dVal :aggregate aggr})
+               (.remove (-> % .-target .-classList) "highlighted")))
+          :on-drag-over #(.preventDefault %)
+          :style {:display "inline-block"
+                  :margin-left "2px"
+                  :height "38px"
+                  :line-height "28px"
+                  :padding "5px 35px"}}
          aggr])]]
     ]])
 
 (defn init-center-rows-container-series-grouping []
-  [:div.white-border-top {:style {:height "50%"}}
-   "Series Grouping"])
+  [:div.white-border-top {:style {:height "50%" :position "relative"}}
+   [:div {:style {:height "22px"}} "Series Grouping"]
+   [:div
+    (for [gr @controller/selected-groupings]
+      [:div.white-border-top {:style {:padding "2px 4px"}} (format-measure-dimension gr)
+       [:a {:href "#"
+            :on-click #(do
+                         (swap! controller/selected-groupings set/difference #{gr})
+                         (.preventDefault %))
+            :style {:float "right" :font-weight "bold"}}
+        "X"]])
+    [:div.white-border-top]]
+   [:div {:id "series-grouping-drop-place"
+          :on-drag-enter
+          #(do 
+             (.preventDefault %)
+             (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+             (.add (-> % .-target .-classList) "highlighted"))
+          :on-drag-leave
+          #(do
+             (.preventDefault %)
+             (.remove (-> % .-target .-classList) "highlighted"))
+          :on-drop
+          #(let [dt (.-dataTransfer %)
+                 t (.getData dt "type")
+                 val (.getData dt "value")
+                 dVal (.getData dt "displayValue")]
+             (do
+               (swap! controller/selected-groupings conj {:value val :displayValue dVal})
+               (.remove (-> % .-target .-classList) "highlighted")))
+          :on-drag-over #(.preventDefault %)
+          :style {:position "absolute"
+                  :background-color "rgba(255, 255, 255, 0.9)"
+                  :text-align "center"
+                  :border "solid 1px white"
+                  :vertical-align "middle"
+                  :top "22px"
+                  :margin "0"
+                  :padding "15px"
+                  :width "100%"
+                  :height "calc(100% - 22px)"
+                  :display (get-css-display-value @measure-or-dimensions-dragged?)}}
+    "Drop Here"]])
 
 (defn init-center-rows-container []
-  [:div.col-xs-2.full-height.white-border 
-   {:id "designer-center-rows-container"
-    :style {:padding "0"}
-    :on-drag-enter #(do 
-                      (.preventDefault %)
-                      (set! (.-effectAllowed (.-dataTransfer %)) "copy")
-                      (.add (-> % .-target .-classList) "highlighted"))
-    :on-drag-leave #(do
-                      (.preventDefault %)
-                      (.remove (-> % .-target .-classList) "highlighted"))
-    :on-drop #(let [dt (.-dataTransfer %)
-                    t (.getData dt "type")
-                    val (.getData dt "value")
-                    dVal (.getData dt "displayValue")
-                    aggr (-> % .-target .-dataset .-aggr)]
-                (do
-                  (swap! controller/selected-rows conj {:value val :displayValue dVal :aggregate aggr})
-                  (.remove (-> % .-target .-classList) "highlighted")))
-    :on-drag-over #(.preventDefault %) }
-   [:div {:style {:height "50%"}}
+  [:div {:style {:height "50%" :position "relative"}
+          }
     [:div {:style {:border-bottom "solid 1px white" :height "22px"}}
-          "Rows :"]
-    [:div {:style {:height "100%"}}
+     "Rows :"]
+    [:div
      (for [m @controller/selected-rows]
        [:div.white-border-top {:style {:padding "2px 4px"}} (format-measure-dimension m)
         [:a {:href "#"
-             :on-click #(do
-                          (swap! controller/selected-rows set/difference #{m})
-                          (.preventDefault %))
+             :on-click
+             #(do
+                (swap! controller/selected-rows set/difference #{m})
+                (.preventDefault %))
              :style {:float "right"
                      :font-weight "bold"}}
             "X"]])
@@ -209,14 +236,31 @@
                     :top "22px"
                     :margin "0"
                     :width "100%"
-                    :height "calc(100% - 16px)"
+                    :height "calc(100% - 22px)"
                     :display (get-css-display-value @measure-or-dimensions-dragged?)}}
      (for [aggr @controller/aggregates]
-       [:div.white-border {:data-aggr aggr
-                           :style {:padding "10px"}}
-        aggr])]]
-    (init-center-rows-container-series-grouping)
-   ])
+       [:div.white-border
+        {:style {:padding "10px"}
+         :on-drag-enter
+         #(do 
+            (.preventDefault %)
+            (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+            (.add (-> % .-target .-classList) "highlighted"))
+         :on-drag-leave
+         #(do
+            (.preventDefault %)
+            (.remove (-> % .-target .-classList) "highlighted"))
+         :on-drop
+         #(let [dt (.-dataTransfer %)
+                t (.getData dt "type")
+                val (.getData dt "value")
+                dVal (.getData dt "displayValue")
+                ]
+            (do
+              (swap! controller/selected-rows conj {:value val :displayValue dVal :aggregate aggr})
+              (.remove (-> % .-target .-classList) "highlighted")))
+         :on-drag-over
+         #(.preventDefault %)} aggr])]])
 
 (defn init-center-plot-area []
   [:div.col-xs-10.full-height.white-border {:id "designer-center-plot-area"} @controller/graph])
@@ -225,7 +269,10 @@
   [:div.col-xs-10.full-height.white-border {:id "designer-center"}
    (init-center-columns-container)
    [:div.row.white-border {:style {:height "calc(100% - 40px)"}}
-    (init-center-rows-container)
+    [:div.col-xs-2.full-height.white-border 
+     {:id "designer-center-rows-container" :style {:padding "0"}}
+     (init-center-rows-container)
+     (init-center-rows-container-series-grouping)]
     (init-center-plot-area)]])
 
 (defn init-right-menu-chart-types []

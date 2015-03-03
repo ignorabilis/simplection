@@ -18,8 +18,7 @@
 (def container
   [:#designer-container.container-fluid
    [:div
-    {:background-color subtle-theme-color
-     :border [["solid" (px 1) container-border-color]]}]])
+    {:background-color subtle-theme-color}]])
 
 (def draggable-chart-item
   [:.draggable-chart-item 

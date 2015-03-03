@@ -32,6 +32,7 @@
 (def selected-chart-type (atom ""))
 (def selected-rows (atom #{}))
 (def selected-columns (atom #{}))
+(def selected-groupings (atom #{}))
 
 
 
