@@ -4,20 +4,44 @@
 
 (def default-graph-definition (atom {:extrapolation "to be implemented"
                                      :interpolation "to be implemented"
-                                     :aggregate-rules {:DC aggs/category-grouping :DO aggs/series-grouping :DY1 + :DY2 +}
-                                     :stack-rules {:type :stack :data [[:DY2 '(:a)] [:DY1 '(:a)] [:DY1 '(:b)] [:DY2 '(:b)]]}
+                                     :aggregate-rules {:category aggs/category-grouping :series aggs/series-grouping :y1 + :y2 +}
+                                     :stack-rules {:type :stack :data [[:y1 '(:a)]
+                                                                       [:y1 '(:b)]
+                                                                       [:y1 '(:c)]
+                                                                       [:y2 '(:a)]
+                                                                       [:y2 '(:b)]
+                                                                       [:y2 '(:c)]]}
                                      :coordinate-system {:type :polar}
-                                     :data-scaling [{:type :category :data [[:DC]]}
-                                                    {:type :numeric :data [[:DY2 '(:a)] [:DY1 '(:a)] [:DY1 '(:b)] [:DY2 '(:b)]]}]
+                                     :data-scaling [{:type :category :data [[:category]]}
+                                                    {:type :numeric :data [[:y1 '(:a)]
+                                                                           [:y1 '(:b)]
+                                                                           [:y1 '(:c)]
+                                                                           [:y2 '(:a)]
+                                                                           [:y2 '(:b)]
+                                                                           [:y2 '(:c)]]}]
                                      :cluster-rules "to be implemented"
                                      :intersection :cross
-                                     :data-paths [{:type :straight :data [[[:DC] [:DY2 '(:a)]]
-                                                                          [[:DC] [:DY1 '(:a)]]
-                                                                          [[:DC] [:DY1 '(:b)]]
-                                                                          [[:DC] [:DY2 '(:b)]]]}]
+                                     :data-paths [{:type :straight :data [[[:category] [:y1 '(:a)]]]}
+                                                  {:type :straight :data [[[:category] [:y1 '(:b)]]]}
+                                                  {:type :straight :data [[[:category] [:y1 '(:c)]]]}
+                                                  {:type :straight :data [[[:category] [:y2 '(:a)]]]}
+                                                  {:type :straight :data [[[:category] [:y2 '(:b)]]]}
+                                                  {:type :straight :data [[[:category] [:y2 '(:c)]]]}]
                                      :data-markers "to be implemented"
                                      :data-areas "to be implemented"
-                                     :data-mask "to be implemented"}))
+                                     :data-mask "to be implemented"
+                                     :data-styles {[[[:DC] [:DY2 '(:a)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                        :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                        :area {:fill "yellow" :stroke "none" :stroke-width 0}}
+                                                  [[[:DC] [:DY1 '(:a)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                        :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                        :area {:fill "yellow" :stroke "none" :stroke-width 0}}
+                                                  [[[:DC] [:DY1 '(:b)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                        :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                        :area {:fill "yellow" :stroke "none" :stroke-width 0}}
+                                                  [[[:DC] [:DY2 '(:b)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                        :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                        :area {:fill "yellow" :stroke "none" :stroke-width 0}}}}))
 
 (defn get-aggregate-rules
   "Get the aggregate rules for the graph."
@@ -48,6 +72,11 @@
   "Get the intersection algorithm for the scaled data."
   []
   (get-in @default-graph-definition [:intersection]))
+
+(defn get-data-paths
+  "Get the intersection algorithm for the scaled data."
+  []
+  (get-in @default-graph-definition [:data-paths]))
 
 (defn get-type
   "Get the type that corresponds to a specific record."

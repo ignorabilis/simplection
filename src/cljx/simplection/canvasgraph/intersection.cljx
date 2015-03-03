@@ -1,8 +1,7 @@
 (ns simplection.canvasgraph.intersection
   (:require [simplection.canvasgraph.definition :as definition]
             [simplection.canvasgraph.acoordinates :as acoordinates]
-            [simplection.canvasgraph.scale :as scale])
-  (#+clj :require #+cljs :require-macros [simplection.core :as cr]))
+            [simplection.canvasgraph.scale :as scale]))
 
 (defn cross
   ([] '(()))

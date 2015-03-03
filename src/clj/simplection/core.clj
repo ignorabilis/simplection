@@ -1,9 +1,11 @@
 (ns simplection.core
   (:require [clojure.string :as string]
             [simplection.canvasgraph.ascale :as scale]
-            [simplection.canvasgraph.acoordinates :as coordinates])
+            [simplection.canvasgraph.acoordinates :as coordinates]
+            [simplection.canvasgraph.apath :as path])
   (:import [simplection.canvasgraph.ascale Category Numeric]
-           [simplection.canvasgraph.acoordinates Cartesian Polar]))
+           [simplection.canvasgraph.acoordinates Cartesian Polar]
+           [simplection.canvasgraph.apath Straight]))
 
 (defn record-mapper
   [hm record-class]
@@ -24,3 +26,7 @@
 (defmacro coordinates-resolver
   []
   (record-factory coordinates/PCoordinateSystem))
+
+(defmacro path-resolver
+  []
+  (record-factory path/PPathGeometry))
