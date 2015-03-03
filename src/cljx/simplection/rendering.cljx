@@ -11,7 +11,7 @@
 (defn generate-graph
   [paths]
   [:svg {:width "100%" :height "100%"}
-   [:g {:transform " translate(200, 200) scale(250)"}
+   [:g {:transform " translate(450, 300) scale(400)"}
     [:g
      paths]]])
 
