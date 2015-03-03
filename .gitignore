@@ -9,4 +9,5 @@ pom.xml.asc
 /.nrepl-port
 /bin/
 /resources/public/js
+/resources/public/css
 figwheel_server.log

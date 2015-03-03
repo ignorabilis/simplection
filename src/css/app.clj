@@ -22,15 +22,31 @@
      :border [["solid" (px 1) container-border-color]]}]])
 
 (def draggable-chart-item
-  [:.draggable-chart-item
+  [:.draggable-chart-item 
    {:border [["solid" (px 1) draggable-border-color]]
     :border-radius (px 4)
     :background-color subtle-theme-color
     :display "inline-block"
     :padding [[(px 2) (px 10)]]}])
 
+(def white-border 
+  [:.white-border
+   {:border "solid 1px white"}])
+
+(def white-border-top
+  [:.white-border-top
+   {:border-top "solid 1px white"}])
+
+(def highlighted 
+  [:.highlighted
+   {:border-color "hsla(0,33.333332%,29.411764%,0.2) !important"}])
+
 (defstyles app
   height
   height-2
   container
-  draggable-chart-item)
+  draggable-chart-item
+  white-border
+  white-border-top
+  highlighted
+)

@@ -1,7 +1,15 @@
 (ns simplection.views.designer
   (:require [simplection.templates.layout :as layout :refer [layout]]
             [simplection.designer.core :as controller]
+            [clojure.set :as set]
+            [reagent.core :refer [atom]]
             [jayq.core :as $]))
+
+(def measure-or-dimensions-dragged? (atom false))
+(defn get-css-display-value [visible?]
+  (if (identity visible?)
+    "" "none"
+    ))
 
 (defn format-measure-dimension [obj]
   (if (nil? (:aggregate obj))
@@ -15,7 +23,7 @@
               collection))))
 
 (defn init-left-menu-search []
-  [:div.row {:id "designer-left-menu-search"
+  [:div.row.white-border {:id "designer-left-menu-search"
              :style {:height "5%"}}
    [:input.col-xs-12 {:type "text"
                       :value @controller/search-term
@@ -29,7 +37,7 @@
 (defn init-left-menu-measures []
   (let [query @controller/search-term
         measures @controller/measures]
-    [:div.row {:id "designer-left-menu-measures"
+    [:div.row.white-border {:id "designer-left-menu-measures"
                :style {:height "40%"}}
      [:h4 "Measures"]
      [:ul
@@ -42,16 +50,14 @@
                                     (do (.setData dt "type" "measure")
                                         (.setData dt "value" (:value m))
                                         (.setData dt "displayValue" (:displayValue m))
-                                        ($/css ($/$ "#column-aggregate-holder") "display" "")
-                                        ($/css ($/$ "#row-aggregate-holder") "display" "")))
-                  :on-drag-end #(do ($/css ($/$ "#column-aggregate-holder") "display" "none")
-                                    ($/css ($/$ "#row-aggregate-holder") "display" "none"))}
+                                        (reset! measure-or-dimensions-dragged? true)))
+                  :on-drag-end #(reset! measure-or-dimensions-dragged? false)}
               (:displayValue m)]])]]))
 
 (defn init-left-menu-dimensions []
   (let [query @controller/search-term
         dimensions @controller/dimensions]
-    [:div.row {:id "designer-left-menu-dimensions"
+    [:div.row.white-border {:id "designer-left-menu-dimensions"
                :style {:height "35%"}}
      [:h4 "Dimensions"]
      [:ul
@@ -63,14 +69,14 @@
                                     (do (.setData dt "type" "dimension")
                                         (.setData dt "value" (:value m))
                                         (.setData dt "displayValue" (:displayValue m))
-                                        ($/css ($/$ "#column-aggregate-holder") "display" "")
-                                        ($/css ($/$ "#row-aggregate-holder") "display" "")))
-                  :on-drag-end #(do ($/css ($/$ "#column-aggregate-holder") "display" "none")
-                                    ($/css ($/$ "#row-aggregate-holder") "display" "none"))}
+                                        (js/console.log (get-css-display-value @measure-or-dimensions-dragged?))
+                                        (reset! measure-or-dimensions-dragged? true)
+                                        (js/console.log (get-css-display-value @measure-or-dimensions-dragged?))))
+                  :on-drag-end #(reset! measure-or-dimensions-dragged? false)}
               (:displayValue m)]])]]))
 
 (defn init-left-menu-it []
-  [:div.row {:id "designer-left-menu-it"
+  [:div.row.white-border {:id "designer-left-menu-it"
              :style {:height "20%"}}
    [:h4 {:style {:height "20%"
                  :margin "0"}}
@@ -88,16 +94,16 @@
                              nil)}]])
 
 (defn init-left-menu []
-  [:div.col-xs-2.full-height {:id "designer-left-menu"}
+  [:div.col-xs-1.full-height {:id "designer-left-menu"}
    (init-left-menu-search)
    (init-left-menu-measures)
    (init-left-menu-dimensions)
    (init-left-menu-it)])
 
 (defn init-center-columns-container []
-  [:div.row {:id "designer-center-columns-container"
-             :style {:height "20%"}
-             :on-drag-enter #(do
+  [:div.row.white-border {:id "designer-center-columns-container"
+             :style {:height "40px"}
+             :on-drag-enter #(do 
                                (.preventDefault %)
                                (set! (.-effectAllowed (.-dataTransfer %)) "copy")
                                (set! (.-effectAllowed (.-dataTransfer %)) "copy")
@@ -116,20 +122,28 @@
                            (.remove (-> % .-target .-classList) "highlighted")))
              :on-drag-over #(.preventDefault %) }
    [:div {:style {:height "100%"}}
-    [:div {:style {:height "20%"}} controller/f-part]
-    [:div {:style {:position "relative" :height "80%"}}
+    [:div.col-xs-1 {:style {:height "100%"
+                            :width "100px"
+                            :line-height "36px"
+                            :border-right "solid 1px white"
+                            :text-align "center"}}
+     "Columns :"]
+    [:div.col-xs-11 {:style {:height "100%" :padding "0" :width "calc(100% - 100px)"}}
      (for [m @controller/selected-columns]
-       [:div
+       [:div.white-border
         {:style {:display "inline-block"
-                 :margin-left "5px"
+                 :margin-left "2px"
+                 :margin-top "2px"
+                 :height "34px"
                  :padding "5px"}}
         [:span (format-measure-dimension m)]
         [:a {:href "#"
              :on-click #(do
-                          (swap! controller/selected-columns clojure.set/difference #{m})
+                          (swap! controller/selected-columns set/difference #{m})
                           (.preventDefault %))
              :style {:float "right"
                      :margin-left "30px"
+                     :clear "both"
                      :font-weight "bold"}}
          "X"]])
      [:div  {:id "column-aggregate-holder"
@@ -138,21 +152,28 @@
                      :margin "0"
                      :background-color "white"
                      :padding "0px"
-                     :height "100%"
+                     :height "40px"
                      :width "100%"
-                     :display "none"}}
+                     :display (get-css-display-value @measure-or-dimensions-dragged?)}}
       (for [aggr @controller/aggregates]
-        [:div {:data-aggr aggr
+        [:div.white-border {:data-aggr aggr
                :style {:display "inline-block"
-                       :padding "15px"}}
+                       :margin-left "2px"
+                       :height "38px"
+                       :line-height "28px"
+                       :padding "5px 35px"}}
          aggr])]]
     ]])
 
+(defn init-center-rows-container-series-grouping []
+  [:div.white-border-top {:style {:height "50%"}}
+   "Series Grouping"])
+
 (defn init-center-rows-container []
-  [:div.col-xs-2.full-height
+  [:div.col-xs-2.full-height.white-border 
    {:id "designer-center-rows-container"
     :style {:padding "0"}
-    :on-drag-enter #(do
+    :on-drag-enter #(do 
                       (.preventDefault %)
                       (set! (.-effectAllowed (.-dataTransfer %)) "copy")
                       (.add (-> % .-target .-classList) "highlighted"))
@@ -168,70 +189,74 @@
                   (swap! controller/selected-rows conj {:value val :displayValue dVal :aggregate aggr})
                   (.remove (-> % .-target .-classList) "highlighted")))
     :on-drag-over #(.preventDefault %) }
-   [:div
-    [:div "Rows"]
-    (for [m @controller/selected-rows]
-      [:div (format-measure-dimension m)
-       [:a {:href "#"
-            :on-click #(do
-                         (swap! controller/selected-rows clojure.set/difference #{m})
-                         (.preventDefault %))
-            :style {:float "right"
-                    :font-weight "bold"}}
-        "X"]])]
-   [:div  {:id "row-aggregate-holder"
-           :style {:position "absolute"
-                   :background-color "white"
-                   :top "0px"
-                   :margin "0"
-                   :width "100%"
-                   :height "100%"
-                   :display "none"}}
-    (for [aggr @controller/aggregates]
-      [:div {:data-aggr aggr
-             :style {:padding "15px"}}
-       aggr])]
+   [:div {:style {:height "50%"}}
+    [:div {:style {:border-bottom "solid 1px white" :height "22px"}}
+          "Rows :"]
+    [:div {:style {:height "100%"}}
+     (for [m @controller/selected-rows]
+       [:div.white-border-top {:style {:padding "2px 4px"}} (format-measure-dimension m)
+        [:a {:href "#"
+             :on-click #(do
+                          (swap! controller/selected-rows set/difference #{m})
+                          (.preventDefault %))
+             :style {:float "right"
+                     :font-weight "bold"}}
+            "X"]])
+     [:div.white-border-top]]
+    [:div  {:id "row-aggregate-holder"
+            :style {:position "absolute"
+                    :background-color "white"
+                    :top "22px"
+                    :margin "0"
+                    :width "100%"
+                    :height "calc(100% - 16px)"
+                    :display (get-css-display-value @measure-or-dimensions-dragged?)}}
+     (for [aggr @controller/aggregates]
+       [:div.white-border {:data-aggr aggr
+                           :style {:padding "10px"}}
+        aggr])]]
+    (init-center-rows-container-series-grouping)
    ])
 
 (defn init-center-plot-area []
-  [:div.col-xs-10.full-height {:id "designer-center-plot-area"} @controller/graph])
+  [:div.col-xs-10.full-height.white-border {:id "designer-center-plot-area"} @controller/graph])
 
 (defn init-center []
-  [:div.col-xs-8.full-height {:id "designer-center"}
+  [:div.col-xs-10.full-height.white-border {:id "designer-center"}
    (init-center-columns-container)
-   [:div.row {:style {:height "80%"}}
+   [:div.row.white-border {:style {:height "calc(100% - 40px)"}}
     (init-center-rows-container)
     (init-center-plot-area)]])
 
 (defn init-right-menu-chart-types []
-  [:div.row {:id "designer-right-menu--types"
-             :style {:height "60%"}}
+  [:div.row.white-border {:id "designer-right-menu--types"
+             :style {:height "40%"}}
    [:h4 (str "Chart Type: " @controller/selected-chart-type)]
    (let [c-types @controller/chart-types]
      [:div.container-fluid {:style {:padding "0"}}
-      (for [mod '(0 1 2)]
-        [:div.col-md-4
-         (for [t (take-nth 3 (drop mod c-types))]
+      (for [mod '(0 1)]
+        [:div.col-lg-6
+         (for [t (take-nth 2 (drop mod c-types))]
            [:button {:value t
                      :class "draggable-chart-item"
                      :on-click #(reset! controller/selected-chart-type t)
-                     :style {:width "70px"
+                     :style {:width "100%"
                              :margin "4px 0 0 0"}}
             t])])])])
 
 (defn init-right-menu-settings []
-  [:div.row {:id "designer-right-menu-settings"
-             :style {:height "40%"}}
+  [:div.row.white-border {:id "designer-right-menu-settings"
+             :style {:height "60%"}}
    "Settings"])
 
 (defn init-right-menu []
-  [:div.col-xs-2.full-height {:id "designer-right-menu"}
+  [:div.col-xs-1.full-height {:id "designer-right-menu"}
    (init-right-menu-chart-types)
    (init-right-menu-settings)])
 
 (defn designer-init []
   (layout
-    [:div.container-fluid.row {:id "designer-container"}
+    [:div.container-fluid.row {:id "designer-container" :style {:min-height "600px"}}
      [:div.row-fluid.full-height
       (init-left-menu)
       (init-center)
