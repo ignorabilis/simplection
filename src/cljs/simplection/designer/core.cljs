@@ -1,6 +1,8 @@
 (ns simplection.designer.core
   (:require [reagent.core :refer [atom]]
             [jayq.core :as $]
+            [simplection.templates.layout :as layout :refer [layout]]
+            [cljs.core.async :refer [<! >! chan close! sliding-buffer put! alts!]]
             [simplection.canvasgraph.coordinates :as cs]
             [simplection.canvasgraph.path :as p]
             [simplection.report :as rep]
@@ -12,7 +14,8 @@
             [simplection.canvasgraph.scale :as scale]
             [simplection.canvasgraph.intersection :as inter]
             [simplection.canvasgraph.csnormalization :as norm]
-            [simplection.rendering :as rendering]))
+            [simplection.rendering :as rendering])
+  (:require-macros [cljs.core.async.macros :as m :refer [go alt!]]))
 
 (def search-term (atom ""))
 
@@ -34,7 +37,14 @@
 (def selected-columns (atom #{}))
 (def selected-groupings (atom #{}))
 
+(def input-ch (chan))
 
+(def output-ch (chan))
+
+(go (while true
+  (let [{t :type b :body} (<! input-ch)]
+    (if (= t :notification)
+      (layout/show-notification (:msg b) (:type b))))))
 
 ;; TESTING!
 (reset! g-data/data-source [{:series "a" :category "me"     :y1 120 :y2 00}
