@@ -14,19 +14,14 @@
 (def intersection-fns {:cross cross :interleave interleave})
 
 (defn intersect
-  [hm]
-  (let [intersect-fn (intersection-fns (hm :intersection))
+  []
+  (let [intersect-fn (intersection-fns (definition/get-intersection))
         data-scaling (definition/get-data-scaling)
-        d (hm :data)
-        s-1 ((nth data-scaling (first d)) :data)
-        s-2 ((nth data-scaling (last d)) :data)]
+        s-1 (definition/get-data (first data-scaling))
+        s-2 (definition/get-data (second data-scaling))]
     (intersect-fn s-1 s-2)))
 
-(defn intersect-data
-  [table]
-  (reduce #(apply conj % (intersect %2)) [] table))
-
-(def intersection-rules (intersect-data (definition/get-coordinate-systems)))
+(def intersection-rules (intersect))
 
 (defn in?
   "True if a collection contains element."

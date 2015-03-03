@@ -10,7 +10,8 @@
             [simplection.canvasgraph.series :as series]
             [simplection.range :as ran]
             [simplection.canvasgraph.scale :as scale]
-            [simplection.canvasgraph.intersection :as inter]))
+            [simplection.canvasgraph.intersection :as inter]
+            [simplection.canvasgraph.csnormalization :as norm]))
 
 (def search-term (atom ""))
 
@@ -34,7 +35,7 @@
 
 
 ;; TESTING!
-(reset! g-data/data-source [{:DO "a" :DC "main" :DY1 500 :DY2 0}
+(reset! g-data/data-source [{:DO "a" :DC "main" :DY1 100 :DY2 0}
                             {:DO "b" :DC "gene" :DY1 40  :DY2 40}
                             {:DO "b" :DC "main" :DY1 50  :DY2 80}
                             {:DO "b" :DC "gene" :DY1 10  :DY2 10}
@@ -45,7 +46,7 @@
                             {:DO "a" :DC "main" :DY1 90  :DY2 90}
                             {:DO "a" :DC "main" :DY1 80  :DY2 20}])
 
-(def f-part (str inter/series-coordinates))
+(def f-part (str inter/series-coordinates " " norm/series-coordinates))
 
 (def test-data-1 (p/Straight. [[[180 455][189 412][199 355][208 381][217 377][226 416][236 407][245 338][254 312][263 282][273 316][282 303][291 325][301 282]
                               [310 273][319 251][328 264][338 247][347 229][356 221][366 273][375 216][384 212][393 208][403 195][412 238][421 229][430 234]
