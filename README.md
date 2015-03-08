@@ -5,7 +5,5 @@ Simplection is a Business Intelligence tool from a new generation. In the cloud,
 
 ## License
 
-Copyright © 2014 FIXME
+All Rights Reserved
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
