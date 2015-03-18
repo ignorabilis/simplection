@@ -1,12 +1,16 @@
 (ns simplection.rendering
   (:require [clojure.string :as string]
-            [simplection.canvasgraph.path :as path]))
+            [simplection.canvasgraph.path :as path]
+            [simplection.canvasgraph.definition :as definition]))
+
+(defn generate-path
+  [value style]
+  [:path {:d (string/join " " (second value)) :fill (:fill style) :stroke (:stroke style) :stroke-width (:stroke-width style)}])
 
 (defn geometry->svg
   "Convert geometry instructions to svg path"
   [table]
-  (for [[k v] table]
-    [:path {:d (string/join " " v) :fill "none" :stroke "green" :stroke-width 0.01}]))
+  (map generate-path table definition/default-style))
 
 (defn generate-graph
   [paths]

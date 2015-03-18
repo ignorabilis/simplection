@@ -43,6 +43,23 @@
                                                                         :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
                                                                         :area {:fill "yellow" :stroke "none" :stroke-width 0}}}}))
 
+(def default-style
+  [{:stroke "#74ACD1" :fill "none" :stroke-width 0.01}
+   {:stroke "#87AAB0" :fill "none" :stroke-width 0.01}
+   {:stroke "#FFAF70" :fill "none" :stroke-width 0.01}
+   {:stroke "#82C695" :fill "none" :stroke-width 0.01}
+   {:stroke "#CDE8BB" :fill "none" :stroke-width 0.01}
+   {:stroke "#8DD3DF" :fill "none" :stroke-width 0.01}
+   {:stroke "#DCC2C1" :fill "none" :stroke-width 0.01}
+   {:stroke "#B3B586" :fill "none" :stroke-width 0.01}
+   {:stroke "#C1E7F0" :fill "none" :stroke-width 0.01}
+   {:stroke "#FBD0E3" :fill "none" :stroke-width 0.01}
+   {:stroke "#B4D2CA" :fill "none" :stroke-width 0.01}
+   {:stroke "#CADCF0" :fill "none" :stroke-width 0.01}
+   {:stroke "#FFD3B5" :fill "none" :stroke-width 0.01}
+   {:stroke "#FDE69A" :fill "none" :stroke-width 0.01}
+   {:stroke "#C69B78" :fill "none" :stroke-width 0.01}])
+
 (defn get-aggregate-rules
   "Get the aggregate rules for the graph."
   []

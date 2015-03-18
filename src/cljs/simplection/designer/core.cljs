@@ -47,7 +47,8 @@
       (layout/show-notification (:msg b) (:type b))))))
 
 ;; TESTING!
-(reset! g-data/data-source [{:series "a" :category "me"     :y1 120 :y2 00}
+;OLD
+#_(reset! g-data/data-source [{:series "a" :category "me"     :y1 120 :y2 00}
                             {:series "b" :category "me"     :y1 40  :y2 40}
                             {:series "c" :category "me"     :y1 50  :y2 80}
                             {:series "a" :category "we"     :y1 10  :y2 10}
@@ -69,5 +70,24 @@
                             {:series "b" :category "others" :y1 80  :y2 20}
                             {:series "c" :category "ninjas" :y1 100 :y2 60}
                             {:series "a" :category "ninjas" :y1 20  :y2 60}])
+
+(reset! g-data/data-source [{:series "a" :category "1"     :y1 40  :y2 50}
+                            {:series "a" :category "2"     :y1 20  :y2 70}
+                            {:series "a" :category "3"     :y1 40  :y2 60}
+                            {:series "a" :category "4"     :y1 70  :y2 90}
+                            {:series "a" :category "5"     :y1 20  :y2 60}
+                            {:series "a" :category "6"     :y1 10  :y2 30}
+                            {:series "b" :category "1"     :y1 100 :y2 120}
+                            {:series "b" :category "2"     :y1 90  :y2 140}
+                            {:series "b" :category "3"     :y1 70  :y2 90}
+                            {:series "b" :category "4"     :y1 50  :y2 110}
+                            {:series "b" :category "5"     :y1 110 :y2 90}
+                            {:series "b" :category "6"     :y1 80  :y2 90}
+                            {:series "c" :category "1"     :y1 150 :y2 00}
+                            {:series "c" :category "2"     :y1 150  :y2 160}
+                            {:series "c" :category "3"     :y1 140  :y2 160}
+                            {:series "c" :category "4"     :y1 130  :y2 160}
+                            {:series "c" :category "5"     :y1 120  :y2 190}
+                            {:series "c" :category "6"     :y1 110  :y2 200}])
 
 (def graph (atom rendering/paths))
