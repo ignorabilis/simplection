@@ -5,7 +5,8 @@
             [reagent.core :refer [atom]]
             [jayq.core :as $]))
 
-(def measure-or-dimensions-dragged? (atom false))
+(def dimension-dragged? (atom false))
+(def measure-dragged? (atom false))
 
 (defn get-css-display-value [visible?]
   (if (identity visible?) "" "none"))
@@ -50,9 +51,9 @@
                      (do (.setData dt "type" "measure")
                        (.setData dt "value" (:value m))
                        (.setData dt "displayValue" (:displayValue m))
-                       (reset! measure-or-dimensions-dragged? true)))
+                       (reset! measure-dragged? true)))
                   :on-drag-end
-                  #(reset! measure-or-dimensions-dragged? false)}
+                  #(reset! measure-dragged? false)}
               (:displayValue m)]])]]))
 
 (defn init-left-menu-dimensions []
@@ -71,8 +72,8 @@
                      (do (.setData dt "type" "dimension")
                        (.setData dt "value" (:value m))
                        (.setData dt "displayValue" (:displayValue m))
-                       (reset! measure-or-dimensions-dragged? true)))
-                  :on-drag-end #(reset! measure-or-dimensions-dragged? false)}
+                       (reset! dimension-dragged? true)))
+                  :on-drag-end #(reset! dimension-dragged? false)}
               (:displayValue m)]])]]))
 
 (defn init-left-menu-it []
@@ -134,6 +135,40 @@
                      :clear "both"
                      :font-weight "bold"}}
          "X"]])
+     [:div  {:id "column-group-drop-container"
+             :on-drag-enter
+             #(do
+                (.preventDefault %)
+                (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+                (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+                (.add (-> % .-target .-classList) "highlighted"))
+             :on-drag-leave
+             #(do
+                (.preventDefault %)
+                (.remove (-> % .-target .-classList) "highlighted")
+                )
+             :on-drop
+             #(let [dt (.-dataTransfer %)
+                    t (.getData dt "type")
+                    val (.getData dt "value")
+                    dVal (.getData dt "displayValue")]
+                (do
+                  (swap! controller/selected-columns
+                         conj
+                         {:value val :displayValue dVal :aggregate "CATEGORY"})
+                  (.remove (-> % .-target .-classList) "highlighted")))
+             :on-drag-over #(.preventDefault %)
+             :style {:position "absolute"
+                     :top "0"
+                     :margin "0"
+                     :background-color "white"
+                     :padding "0px"
+                     :height "40px"
+                     :width "100%"
+                     :display (get-css-display-value
+                                @measure-dragged?)}}
+      "Drop Here to create a Category"]
+
      [:div  {:id "column-aggregate-holder"
              :style {:position "absolute"
                      :top "0"
@@ -143,7 +178,7 @@
                      :height "40px"
                      :width "100%"
                      :display (get-css-display-value
-                                @measure-or-dimensions-dragged?)}}
+                                @dimension-dragged?)}}
       (for [aggr @controller/aggregates]
         [:div.white-border
          {:on-drag-enter
@@ -211,7 +246,7 @@
              (do
                (swap! controller/selected-groupings
                       conj
-                      {:value val :displayValue dVal})
+                      {:value val :displayValue dVal :aggregate "SERIES"})
                (.remove (-> % .-target .-classList) "highlighted")))
           :on-drag-over #(.preventDefault %)
           :style {:position "absolute"
@@ -225,8 +260,8 @@
                   :width "100%"
                   :height "calc(100% - 22px)"
                   :display (get-css-display-value
-                             @measure-or-dimensions-dragged?)}}
-    "Drop Here"]])
+                             (or @dimension-dragged? @measure-dragged?))}}
+    "Drop Here to create Series Grouping"]])
 
 (defn init-center-rows-container []
   [:div {:style {:height "50%" :position "relative"}
@@ -249,6 +284,41 @@
                     :font-weight "bold"}}
         "X"]])
     [:div.white-border-top]]
+   [:div  {:id "row-group-drop-container"
+           :on-drag-enter
+           #(do
+              (.preventDefault %)
+              (set! (.-effectAllowed (.-dataTransfer %)) "copy")
+              (.add (-> % .-target .-classList) "highlighted"))
+           :on-drag-leave
+           #(do
+              (.preventDefault %)
+              (.remove (-> % .-target .-classList) "highlighted"))
+           :on-drop
+           #(let [dt (.-dataTransfer %)
+                  t (.getData dt "type")
+                  val (.getData dt "value")
+                  dVal (.getData dt "displayValue")
+                  ]
+              (do
+                (swap! controller/selected-rows
+                       conj
+                       {:value val
+                        :displayValue dVal
+                        :aggregate "CATEGORY"})
+                (.remove (-> % .-target .-classList) "highlighted")))
+           :on-drag-over
+           #(.preventDefault %)
+           :style {:position "absolute"
+                   :background-color "white"
+                   :top "22px"
+                   :margin "0"
+                   :width "100%"
+                   :height "calc(100% - 22px)"
+                   :display (get-css-display-value
+                              @measure-dragged?)}}
+    "Drop Here to create a Category"]
+
    [:div  {:id "row-aggregate-holder"
            :style {:position "absolute"
                    :background-color "white"
@@ -257,7 +327,7 @@
                    :width "100%"
                    :height "calc(100% - 22px)"
                    :display (get-css-display-value
-                              @measure-or-dimensions-dragged?)}}
+                              @dimension-dragged?)}}
     (for [aggr @controller/aggregates]
       [:div.white-border
        {:style {:padding "10px"}

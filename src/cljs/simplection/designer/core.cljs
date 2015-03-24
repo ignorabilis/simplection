@@ -78,7 +78,7 @@
 (def dimensions (atom (get-dimensions (first @g-data/data-source))))
 
 (def chart-types (atom #{"Gan", "Pie", "Bar", "Lin", "Sca", "Fun"}))
-(def aggregates (atom #{"SUM" "AVG" "MIN" "MAX" "MEAN" "COUNT" "CATEGORY"}))
+(def aggregates (atom #{"SUM" "AVG" "MIN" "MAX" "MEAN" "COUNT"}))
 
 (def selected-chart-type (atom ""))
 (def selected-rows (atom #{}))
@@ -112,7 +112,9 @@
       )))
 
 (defn get-aggregate-rules [] 
-  (get-aggregate-rules-recursive @selected-columns))
+  (assoc (get-aggregate-rules-recursive @selected-columns)
+    (get-aggregate-rules-recursive @selected-rows)
+    (get-aggregate-rules-recursive @selected-groupings)))
 
 ;:aggregate-rules {:category aggs/category-grouping :series aggs/series-grouping :y1 + :y2 +}
 
@@ -124,4 +126,13 @@
 (add-watch selected-columns
            :columns-watcher
            (fn [_ _ _ _] (refresh-definition)))
+
+(add-watch selected-rows
+           :rows-watcher
+           (fn [_ _ _ _] (refresh-definition)))
+
+(add-watch selected-groupings
+           :groups-watcher
+           (fn [_ _ _ _] (refresh-definition)))
+
              
