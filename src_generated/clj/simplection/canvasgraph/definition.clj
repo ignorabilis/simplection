@@ -60,6 +60,8 @@
    {:stroke "#FDE69A" :fill "none" :stroke-width 0.01}
    {:stroke "#C69B78" :fill "none" :stroke-width 0.01}])
 
+(def default-axis-style {:stroke "#777777" :fill "none" :stroke-width 0.002})
+
 (defn get-aggregate-rules
   "Get the aggregate rules for the graph."
   []

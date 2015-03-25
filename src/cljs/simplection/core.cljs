@@ -8,8 +8,6 @@
             [goog.history.EventType :as EventType])
   (:import goog.History))
 
-(enable-console-print!)
-
 ;; -------------------------
 ;; Views
 (defn current-page []

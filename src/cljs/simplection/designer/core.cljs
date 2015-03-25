@@ -55,7 +55,7 @@
                             {:series "b" :category "4"     :y1 50  :y2 110}
                             {:series "b" :category "5"     :y1 110 :y2 90}
                             {:series "b" :category "6"     :y1 80  :y2 90}
-                            {:series "c" :category "1"     :y1 150 :y2 00}
+                            {:series "c" :category "1"     :y1 150 :y2 100}
                             {:series "c" :category "2"     :y1 150  :y2 160}
                             {:series "c" :category "3"     :y1 140  :y2 160}
                             {:series "c" :category "4"     :y1 130  :y2 160}
@@ -111,7 +111,7 @@
       (get-aggregate-func (:aggregate (first map)))
       )))
 
-(defn get-aggregate-rules [] 
+(defn get-aggregate-rules []
   (assoc (get-aggregate-rules-recursive @selected-columns)
     (get-aggregate-rules-recursive @selected-rows)
     (get-aggregate-rules-recursive @selected-groupings)))
@@ -135,4 +135,3 @@
            :groups-watcher
            (fn [_ _ _ _] (refresh-definition)))
 
-             

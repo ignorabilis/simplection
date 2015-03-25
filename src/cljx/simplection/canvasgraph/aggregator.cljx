@@ -37,4 +37,3 @@
    organization-map))
 
 (def aggregated-table (aggregate-table @g-data/data-source definition/organize-rules))
-    
