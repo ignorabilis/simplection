@@ -15,6 +15,8 @@
             [simplection.canvasgraph.scale :as scale]
             [simplection.canvasgraph.intersection :as inter]
             [simplection.canvasgraph.csnormalization :as norm]
+            [historian.core :as hist]
+            [historian.keys]
             [simplection.rendering :as rendering])
   (:require-macros [cljs.core.async.macros :as m :refer [go alt!]]))
 
@@ -77,9 +79,12 @@
 
 (def dimensions (atom (get-dimensions (first @g-data/data-source))))
 
-(def chart-types (atom #{"Gan", "Pie", "Bar", "Lin", "Sca", "Fun"}))
+(def chart-types (atom #{"Line" "Area"}))
 (def aggregates (atom #{"SUM" "AVG" "MIN" "MAX" "MEAN" "COUNT"}))
+(def coord-sys-types (atom #{{:value :cartesian :displayValue "Cartesian"},
+                         {:value :polar :displayValue "Polar"}}))
 
+(def selected-coord-sys-type (atom nil))
 (def selected-chart-type (atom ""))
 (def selected-rows (atom #{}))
 (def selected-columns (atom #{}))
@@ -112,16 +117,18 @@
       )))
 
 (defn get-aggregate-rules []
-  (assoc (get-aggregate-rules-recursive @selected-columns)
+  (merge (get-aggregate-rules-recursive @selected-columns)
     (get-aggregate-rules-recursive @selected-rows)
     (get-aggregate-rules-recursive @selected-groupings)))
-
-;:aggregate-rules {:category aggs/category-grouping :series aggs/series-grouping :y1 + :y2 +}
 
 (def graph (atom rendering/paths))
 
 (defn refresh-definition []
-    (swap! definition/default-graph-definition merge { :aggregate-rules (get-aggregate-rules)}))
+  (swap! definition/default-graph-definition
+         merge
+         {:aggregate-rules (get-aggregate-rules)
+          :coordinate-system {:type (:value @selected-coord-sys-type)}}))
+    
 
 (add-watch selected-columns
            :columns-watcher
@@ -135,3 +142,19 @@
            :groups-watcher
            (fn [_ _ _ _] (refresh-definition)))
 
+(add-watch selected-chart-type
+           :selected-chart-type
+           (fn [_ _ _ _] (refresh-definition)))
+
+(add-watch selected-coord-sys-type
+           :selected-coord-sys-type
+           (fn [_ _ _ _] (refresh-definition)))
+
+(hist/replace-library! (atom []))
+(hist/replace-prophecy! (atom []))
+
+(historian.keys/bind-keys)
+
+(hist/record! selected-columns :selected-columns)
+(hist/record! selected-rows :selected-rows)
+(hist/record! selected-groupings :selected-groupings) 

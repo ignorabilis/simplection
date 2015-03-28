@@ -26,7 +26,8 @@
                  [http-kit "2.0.0"]
                  [figwheel "0.2.3-SNAPSHOT"]
                  [secretary "1.2.1"]
-                 [jayq "2.5.4"]]
+                 [jayq "2.5.4"]
+                 [historian "1.0.7"]]
 
   :plugins [[lein-pdo "0.1.1"]
             [lein-ring "0.8.13"]

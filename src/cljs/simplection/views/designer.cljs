@@ -380,7 +380,7 @@
    (let [c-types @controller/chart-types]
      [:div.container-fluid {:style {:padding "0"}}
       (for [mod '(0 1)]
-        [:div.col-lg-6
+        [:div.col-lg-12
          (for [t (take-nth 2 (drop mod c-types))]
            [:button {:value t
                      :class "draggable-chart-item"
@@ -388,7 +388,19 @@
                      #(reset! controller/selected-chart-type t)
                      :style {:width "100%"
                              :margin "4px 0 0 0"}}
-            t])])])])
+            t])])])
+   [:h4 (str "Coordinate System: " (:displayValue @controller/selected-coord-sys-type))]
+   (let [c-types @controller/coord-sys-types]
+     [:div.container-fluid {:style {:padding "0"}}
+         (for [t c-types]
+           [:button {:value (:value t)
+                     :class "draggable-chart-item"
+                     :on-click
+                     #(reset! controller/selected-coord-sys-type t)
+                     :style {:width "100%"
+                             :margin "4px 0 0 0"}}
+            (:displayValue t)])])
+   ])
 
 (defn init-right-menu-settings []
   [:div.row.white-border {:id "designer-right-menu-settings"
