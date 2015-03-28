@@ -8,7 +8,7 @@
     " "
     [:a {:href "#/pricing"} "Pricing"]
     " "
-    [:a {:href "#/start-now"} "Start Now"]]])
+    [:a {:href "#/start-now/ba"} "Start Now"]]])
 
 (defn footer []
   [:div.navbar.row

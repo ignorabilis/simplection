@@ -1,6 +1,8 @@
 (ns simplection.core
   (:require [simplection.views.home :as home]
-            [simplection.views.designer :as designer]
+            [simplection.views.perspectives.ba :as ba]
+            [simplection.designer.perspectives.it :as it]
+            [simplection.views.perspectives.design :as design]
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
             [secretary.core :as secretary :include-macros true]
@@ -23,9 +25,14 @@
 (secretary/defroute "/pricing" []
   (session/put! :current-page home/pricing-page))
 
-(secretary/defroute "/start-now" []
-  (session/put! :current-page designer/designer-init))
+(secretary/defroute "/start-now/ba" []
+  (session/put! :current-page ba/designer-init))
 
+(secretary/defroute "/start-now/it" []
+  (session/put! :current-page it/designer-init))
+
+(secretary/defroute "/start-now/ux" []
+  (session/put! :current-page design/designer-init))
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined

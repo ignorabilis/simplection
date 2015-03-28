@@ -1,4 +1,4 @@
-(ns simplection.views.designer
+(ns simplection.views.perspectives.ba
   (:require [simplection.templates.layout :as layout :refer [layout]]
             [simplection.designer.core :as controller]
             [clojure.set :as set]
@@ -417,6 +417,8 @@
     [:div.container-fluid.row
      {:id "designer-container"
       :style {:min-height "600px"}}
+     [:a.menu-nav {:href "#/start-now/it"} " IT Perspective "]
+     [:a.menu-nav {:href "#/start-now/ux"} " Design Perspective "]
      [:div.row-fluid.full-height
       (init-left-menu)
       (init-center)

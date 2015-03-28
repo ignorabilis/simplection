@@ -36,9 +36,28 @@
   [:.white-border-top
    {:border-top "solid 1px white"}])
 
+(def menu-nav
+  [:.menu-nav
+   {:margin "10px"}])
+
+(def span-btn
+  [:.span-btn
+   {:margin "2px 10px"
+    :font-size "20px"
+    :border "solid 2px transparent"
+    :padding "8px"}])
+
+(def span-btn-hover
+  [:.span-btn:hover
+   {:border "solid 2px white"}])
+
 (def highlighted 
   [:.highlighted
    {:border-color "hsla(0,33.333332%,29.411764%,0.2) !important"}])
+
+(def tag 
+  [:.tag
+   {:margin "10px"}])
 
 (defstyles app
   height
@@ -48,4 +67,8 @@
   white-border
   white-border-top
   highlighted
+  menu-nav
+  span-btn-hover
+  span-btn
+  tag
 )
