@@ -1,7 +1,7 @@
 (ns simplection.core
   (:require [simplection.views.home :as home]
             [simplection.views.perspectives.ba :as ba]
-            [simplection.designer.perspectives.it :as it]
+            [simplection.views.perspectives.it :as it]
             [simplection.views.perspectives.design :as design]
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]

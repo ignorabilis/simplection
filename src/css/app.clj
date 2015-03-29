@@ -66,6 +66,32 @@
     :padding-top "20%"
     :display "inline-block"}])
 
+(def icon-img
+  [:.icon-img
+   {:width "26px"
+    :height "26px"
+    :font-size "20px"
+    :margin-right "10px"}])
+
+(def compound-btn
+  [:.compound-btn {:border "solid 2px transparent"
+                   :padding "10px"
+                   }])
+
+(def compound-btn-hover
+  [:.compound-btn:hover { :border"solid 2px white"}])
+
+(def transparent
+  [:.transparent { :background-color "transparent"}])
+
+(def right-spaced
+  [:.right-spaced {:padding-right "40px"
+                   :min-width "150px"
+                   :display "inline-block"}])
+
+(def large-font
+  [:.large-font {:font-size "20px"}])
+
 (defstyles app
   height
   height-2
@@ -79,4 +105,10 @@
   span-btn
   tag
   color-block
+  icon-img
+  compound-btn
+  compound-btn-hover
+  transparent
+  right-spaced
+  large-font
 )
