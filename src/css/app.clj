@@ -42,7 +42,7 @@
 
 (def span-btn
   [:.span-btn
-   {:margin "2px 10px"
+   {:margin "2px 2px 2px 2px"
     :font-size "20px"
     :border "solid 2px transparent"
     :padding "8px"}])
@@ -92,6 +92,10 @@
 (def large-font
   [:.large-font {:font-size "20px"}])
 
+(def delimiter
+  [:.delimiter {:font-size "26px" :color "grey" :margin "16px"}])
+
+
 (defstyles app
   height
   height-2
@@ -111,4 +115,5 @@
   transparent
   right-spaced
   large-font
+  delimiter
 )

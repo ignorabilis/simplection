@@ -34,12 +34,17 @@
          [:option "Sales Report 2015"]
          [:option "Sales Reports Theme"]
          [:option "Internal Reports Theme"]]]
-       [:span.glyphicon.glyphicon-fast-backward.span-btn]
-       [:span.glyphicon.glyphicon-fast-forward.span-btn]
-       [:span.glyphicon.glyphicon-floppy-save.span-btn]
-       [:span.glyphicon.glyphicon-open.span-btn]
+       [:span.glyphicon.glyphicon-share-alt.span-btn {:style {:transform "rotateY(180deg)"}
+                                                      :data-toggle "tooltip"
+                                                      :title "Undo"}]
+       [:span.glyphicon.glyphicon-share-alt.span-btn {:data-toggle "tooltip"
+                                                      :title "Redo"}]
+       [:span.glyphicon.glyphicon-floppy-save.span-btn {:data-toggle "tooltip"
+                                                      :title "Save"}]
+       [:span.glyphicon.glyphicon-open.span-btn {:data-toggle "tooltip"
+                                                      :title "Push"}]
        [:h4
-        {:style {:display "inline-block"}}
+        {:style {:display "inline-block" :margin-left "60px" :font-weight "bold"}}
         (str @selected-report " / Main Theme")]])
 
 (defn init-color-wheel []
@@ -70,22 +75,33 @@
 
 (defn init-toolbox []
   (list
-    [:span.glyphicon.glyphicon-plus.span-btn]
-    [:span.glyphicon.glyphicon-minus.span-btn]
-    [:span.glyphicon.glyphicon-pencil.span-btn]
-    [:span.glyphicon.glyphicon-search.span-btn]
-    [:span.glyphicon.glyphicon-star-empty.span-btn]
-    [:span.glyphicon.glyphicon-th-list.span-btn]
-    [:span.glyphicon.glyphicon-trash.span-btn]
-    [:span.glyphicon.glyphicon-file.span-btn]
-    [:span.glyphicon.glyphicon-download-alt.span-btn]
-    [:span.glyphicon.glyphicon-book.span-btn]
-    [:span.glyphicon.glyphicon-screenshot.span-btn]
-    
-    [:span.glyphicon.glyphicon-eye-open.span-btn]
-    [:span.glyphicon.glyphicon-fire.span-btn]
-    [:span.glyphicon.glyphicon-magnet.span-btn]
-    [:span.glyphicon.glyphicon-screenshot.span-btn]
+    [:span.glyphicon.glyphicon-bold.span-btn {:data-toggle "tooltip"
+                                                      :title "Bold"}]
+    [:span.glyphicon.glyphicon-italic.span-btn]
+    [:span.span-btn {:style {:text-decoration "underline"
+                             :font-weight ""
+                             :font-size "26px"}
+                     :data-toggle "tooltip"
+                     :title "Italic"}
+     
+     "U"]
+    [:span.delimiter "|"]
+    [:span.glyphicon.glyphicon-superscript.span-btn {:data-toggle "tooltip" :title "Superscript"}]
+    [:span.glyphicon.glyphicon-subscript.span-btn {:data-toggle "tooltip" :title "Subscript"}]
+    [:span.delimiter "|"]
+    [:span.glyphicon.glyphicon-align-left.span-btn {:data-toggle "tooltip" :title "Align Left"}]
+    [:span.glyphicon.glyphicon-align-center.span-btn {:data-toggle "tooltip" :title "Align Center"}]
+    [:span.glyphicon.glyphicon-align-right.span-btn {:data-toggle "tooltip" :title "Align Right"}]
+    [:span.glyphicon.glyphicon-align-justify.span-btn {:data-toggle "tooltip" :title "Justify"}]
+    [:span.delimiter "|"]
+    [:span.glyphicon.glyphicon-indent-left.span-btn {:data-toggle "tooltip" :title "Indent Left"}]
+    [:span.glyphicon.glyphicon-indent-right.span-btn {:data-toggle "tooltip" :title "Indent Right"}]
+    [:span.delimiter "|"]
+    [:span.glyphicon.glyphicon-text-size.span-btn {:data-toggle "tooltip" :title "Text Size"}]
+    [:span.glyphicon.glyphicon-text-height.span-btn {:data-toggle "tooltip" :title "Text Height"}]
+    [:span.glyphicon.glyphicon-text-width.span-btn {:data-toggle "tooltip"  :title "Text Width"}]
+    [:span.glyphicon.glyphicon-text-color.span-btn {:data-toggle "tooltip" :title "Text Color"}]
+    [:span.glyphicon.glyphicon-text-background.span-btn {:data-toggle "tooltip" :title "Text Background Color"}]
     [:br]
     ))
 

@@ -252,107 +252,107 @@
     ]
    [:div.tab-pane.full-height.tab-pane-4.span-spaced  {:role "tabpanel" :style {:padding "20px"}}
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Super Admin"]
      [:a [:span.right-spaced "Read/Write Users"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Super Admin"]
      [:a [:span.right-spaced "Read/Write User Groups"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Super Admin"]
      [:a [:span.right-spaced "Read/Write Reports"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Super Admin"]
      [:a [:span.right-spaced "Read/Write Data Sources"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Super Admin"]
      [:a [:span.right-spaced "Read/Write Stylesheets"]]]
     
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Admin"]
      [:a [:span.right-spaced "Read/Write Users"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Admin"]
      [:a [:span.right-spaced "Read/Write User Groups"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Admin"]
      [:a [:span.right-spaced "Read/Write Reports"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Admin"]
      [:a [:span.right-spaced "Read/Write Data Sources"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "Admin"]
      [:a [:span.right-spaced "Read/Write Stylesheets"]]]
     
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "BA"]
      [:a [:span.right-spaced "Read/Write Users"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "BA"]
      [:a [:span.right-spaced "Read/Write User Groups"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "BA"]
      [:a [:span.right-spaced "Read/Write Reports"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "BA"]
      [:a [:span.right-spaced "Read/Write Data Sources"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "BA"]
      [:a [:span.right-spaced "Read/Write Stylesheets"]]]
     
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write Users"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write User Groups"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write Reports"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write Data Sources"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write Stylesheets"]]]
     
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write Users"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write User Groups"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write Reports"]]]
     [:div
-     [:span.right-spaced.large-font "✗"]
+     [:span.glyphicon.glyphicon-remove.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write Data Sources"]]]
     [:div
-     [:span.right-spaced.large-font "✓"]
+     [:span.glyphicon.glyphicon-ok.right-spaced]
      [:span.right-spaced "IT"]
      [:a [:span.right-spaced "Read/Write Stylesheets"]]]
     ]])
