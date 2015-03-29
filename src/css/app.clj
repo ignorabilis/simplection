@@ -59,6 +59,13 @@
   [:.tag
    {:margin "10px"}])
 
+(def color-block
+  [:.color-block
+   {:border "solid 1px white"
+    :width "20%"
+    :padding-top "20%"
+    :display "inline-block"}])
+
 (defstyles app
   height
   height-2
@@ -71,4 +78,5 @@
   span-btn-hover
   span-btn
   tag
+  color-block
 )

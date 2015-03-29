@@ -44,17 +44,28 @@
 
 (defn init-color-wheel []
   (list
-    [:div.white-border
-     [:h3 "Color Rules"]
-     [:div "Complement"]
-     [:div "Analogue"]
-     [:div "Monochrome"]
-     [:div "Custom"]]
     [:br]
-    [:div.white-border
-     [:img {:src ""}]
-     "asd"
-     ]
+    [:div.white-border {:style {:padding "10px"}}
+     [:h3 "Color Rules"]
+     [:ul
+      [:li [:a "Complement"]]
+      [:li [:a "Analogue"]]
+      [:li [:a "Monochrome"]]
+      [:li [:a "Custom"]]]]
+    
+    [:br]
+    [:div.white-border {:style {:padding "10px"}}
+     [:img {:src "images/color-wheel_crosshair.png"}]
+     [:img {:src "images/color-switch-tool.png" :style {:margin-left "30px"}} ]]
+    
+    [:br]
+    [:div.white-border {:style {:padding "10px"}}
+    [:div {:style {:background-color "transparent" }}
+     [:div.color-block {:style {:background-color "#d2232a"}}]
+     [:div.color-block {:style {:background-color "#fcaf3b"}}]
+     [:div.color-block {:style {:background-color "#fef200"}}]
+     [:div.color-block {:style {:background-color "#40af49"}}]
+     [:div.color-block {:style {:background-color "#00adef"}}]]]
     ))
 
 (defn init-toolbox []
