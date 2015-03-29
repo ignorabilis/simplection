@@ -11,3 +11,5 @@ pom.xml.asc
 /resources/public/js
 /resources/public/css
 figwheel_server.log
+/src_generated/
+/dfa
