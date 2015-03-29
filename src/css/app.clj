@@ -3,7 +3,7 @@
             [garden.units :refer [px]]
             [garden.color :as color]))
 
-(def subtle-theme-color (color/rgba 100, 50, 50, 0.1))
+(def subtle-theme-color (color/rgba 178, 158, 119, 0.1))
 (def container-border-color (color/rgb 255, 255, 255))
 (def draggable-border-color (color/rgb 128, 128, 128))
 
