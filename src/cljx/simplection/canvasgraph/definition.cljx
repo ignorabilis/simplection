@@ -5,7 +5,7 @@
 (def default-graph-definition (atom {:extrapolation "to be implemented"
                                      :interpolation "to be implemented"
                                      :aggregate-rules {:category aggs/category-grouping :series aggs/series-grouping :y1 + :y2 +}
-                                     :stack-rules {:type :stack :data [[:y1 '(:a)]
+                                     :stack-rules {:type :stack :data nil #_[[:y1 '(:a)]
                                                                        [:y1 '(:b)]
                                                                        [:y1 '(:c)]
                                                                        [:y2 '(:a)]
@@ -43,24 +43,35 @@
                                                                         :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
                                                                         :area {:fill "yellow" :stroke "none" :stroke-width 0}}}}))
 
-(def default-style
-  [{:stroke "#74ACD1" :fill "none" :stroke-width 0.01}
-   {:stroke "#87AAB0" :fill "none" :stroke-width 0.01}
-   {:stroke "#FFAF70" :fill "none" :stroke-width 0.01}
-   {:stroke "#82C695" :fill "none" :stroke-width 0.01}
-   {:stroke "#CDE8BB" :fill "none" :stroke-width 0.01}
-   {:stroke "#8DD3DF" :fill "none" :stroke-width 0.01}
-   {:stroke "#DCC2C1" :fill "none" :stroke-width 0.01}
-   {:stroke "#B3B586" :fill "none" :stroke-width 0.01}
-   {:stroke "#C1E7F0" :fill "none" :stroke-width 0.01}
-   {:stroke "#FBD0E3" :fill "none" :stroke-width 0.01}
-   {:stroke "#B4D2CA" :fill "none" :stroke-width 0.01}
-   {:stroke "#CADCF0" :fill "none" :stroke-width 0.01}
-   {:stroke "#FFD3B5" :fill "none" :stroke-width 0.01}
-   {:stroke "#FDE69A" :fill "none" :stroke-width 0.01}
-   {:stroke "#C69B78" :fill "none" :stroke-width 0.01}])
+(defn get-stroke-width
+  "Get the appropriate stroke width according to the graph type."
+  [stroke-width]
+  ((get-type (get-coordinate-system))
+   {:cartesian (/ stroke-width 2)
+    :polar stroke-width}))
 
-(def default-axis-style {:stroke "#777777" :fill "none" :stroke-width 0.002})
+
+(defn default-style
+  []
+  [{:stroke "#74ACD1" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#87AAB0" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#FFAF70" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#82C695" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#CDE8BB" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#8DD3DF" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#DCC2C1" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#B3B586" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#C1E7F0" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#FBD0E3" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#B4D2CA" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#CADCF0" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#FFD3B5" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#FDE69A" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#C69B78" :fill "none" :stroke-width (get-stroke-width 0.01)}])
+
+(defn default-axis-style
+  []
+  {:stroke "#999999" :fill "none" :stroke-width (get-stroke-width 0.003)})
 
 (defn get-aggregate-rules
   "Get the aggregate rules for the graph."
@@ -107,8 +118,18 @@
   [hm]
   (hm :data))
 
-(def organize-rules (get-aggregate-rules))
-(def categories (hme/keys-by-value organize-rules aggs/category-grouping))
-(def series (hme/keys-by-value organize-rules aggs/series-grouping))
-(def groupings (concat categories series))
-(def aggregates (hme/select-keys-rest organize-rules groupings))
+(defn get-categories
+  []
+  (hme/keys-by-value (get-aggregate-rules) aggs/category-grouping))
+
+(defn get-series
+  []
+  (hme/keys-by-value (get-aggregate-rules) aggs/series-grouping))
+
+(defn get-groupings
+  []
+  (concat (get-categories) (get-series)))
+
+(defn get-aggregates
+  []
+  (hme/select-keys-rest (get-aggregate-rules) (get-groupings)))

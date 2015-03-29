@@ -121,34 +121,48 @@
     (get-aggregate-rules-recursive @selected-rows)
     (get-aggregate-rules-recursive @selected-groupings)))
 
-(def graph (atom rendering/paths))
+(def graph (atom (rendering/render @g-data/data-source)))
 
-(defn refresh-definition []
+(defn refresh-aggregates []
   (swap! definition/default-graph-definition
          merge
-         {:aggregate-rules (get-aggregate-rules)
-          :coordinate-system {:type (:value @selected-coord-sys-type)}}))
-    
+         {:aggregate-rules (get-aggregate-rules)}))
+
+(defn refresh-type []
+  #_(swap! definition/default-graph-definition
+         merge
+         {:coordinate-system {:type (:value @selected-coord-sys-type)}}))
+
+(defn refresh-coordinates []
+  (swap! definition/default-graph-definition
+         merge
+         {:coordinate-system {:type (:value @selected-coord-sys-type)}}))
+
+(defn refresh-graph []
+  (reset! graph (rendering/render @g-data/data-source)))
+
+(add-watch definition/default-graph-definition :graph-definition
+           (fn [_ _ _ _] (refresh-graph)))
 
 (add-watch selected-columns
            :columns-watcher
-           (fn [_ _ _ _] (refresh-definition)))
+           (fn [_ _ _ _] (refresh-aggregates)))
 
 (add-watch selected-rows
            :rows-watcher
-           (fn [_ _ _ _] (refresh-definition)))
+           (fn [_ _ _ _] (refresh-aggregates)))
 
 (add-watch selected-groupings
            :groups-watcher
-           (fn [_ _ _ _] (refresh-definition)))
+           (fn [_ _ _ _] (refresh-aggregates)))
 
 (add-watch selected-chart-type
            :selected-chart-type
-           (fn [_ _ _ _] (refresh-definition)))
+           (fn [_ _ _ _] (refresh-type)))
 
 (add-watch selected-coord-sys-type
            :selected-coord-sys-type
-           (fn [_ _ _ _] (refresh-definition)))
+           (fn [_ _ _ _] (refresh-coordinates)))
 
 (hist/replace-library! (atom []))
 (hist/replace-prophecy! (atom []))
@@ -157,4 +171,4 @@
 
 (hist/record! selected-columns :selected-columns)
 (hist/record! selected-rows :selected-rows)
-(hist/record! selected-groupings :selected-groupings) 
+(hist/record! selected-groupings :selected-groupings)

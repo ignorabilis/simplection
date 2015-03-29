@@ -29,49 +29,16 @@
       (hs/rename-keys row (generate-key-map row series aggregates))
            series)))
 
-(def keys-stacked-table (stack-keys aggregator/aggregated-table definition/series definition/aggregates))
+(defn get-table-stacked-keys
+  [aggregated-table]
+  (stack-keys aggregated-table (definition/get-series) (definition/get-aggregates)))
 
 (defn dynamic->static-series
   "Convert all the dynamic (row) series to static (column) series."
-  [keys-stacked-table categories]
-   (for [[k v] (aggregator/group-table keys-stacked-table definition/categories)]
+  [aggregated-table]
+   (for [[k v] (aggregator/group-table (get-table-stacked-keys aggregated-table) (definition/get-categories))]
     {k (apply merge v)}))
 
-(def static-series (dynamic->static-series keys-stacked-table definition/categories))
-
-(defn default-stack-rules
-  "By default each series is not stacked."
-  [static-series]
-  (map vector
-    (distinct
-      (for [[k v] (apply merge static-series)
-            [k-2 v-2] v]
-        k-2))))
-
-(def stack-rules (default-stack-rules static-series))
-
-(def +-nil (fnil + 0 0))
-
-(defn stack-coll [coll]
-  (map #(and %1 %2)
-    coll
-    (reduce #(conj %1 (+-nil (last %1) %2)) [(first coll)] (rest coll))))
-
-(defn stack-multi [hm stack-rules]
-  (for [rule stack-rules]
-    (stack-coll (hme/select-values-empty hm rule))))
-
-(defn red-concat [coll]
-  (reduce concat coll))
-
-(defn stack [hm stack-rules]
-  (zipmap
-   (red-concat stack-rules)
-   (red-concat (stack-multi hm stack-rules))))
-
-(defn stack-table [table stack-rules]
-  (for [row table
-        [k v] row]
-    (merge (stack v stack-rules) k)))
-
-(def stacked-table (stack-table static-series stack-rules))
+(defn get-static-series
+  [aggregated-table]
+  (dynamic->static-series aggregated-table))

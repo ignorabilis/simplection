@@ -1,7 +1,6 @@
 (ns simplection.rendering
   (:require [clojure.string :as string]
-            [simplection.canvasgraph.path :as path]
-            [simplection.canvasgraph.csnormalization :as norm]
+            [simplection.canvasgraph.core :as graph-core]
             [simplection.canvasgraph.definition :as definition]))
 
 (defn generate-path
@@ -11,7 +10,7 @@
 (defn path-geometry->svg
   "Convert path geometry instructions to svg path"
   [table]
-  (map generate-path table definition/default-style))
+  (map generate-path table (definition/default-style)))
 
 (defn render-circle
   [value style]
@@ -28,12 +27,12 @@
   [grid-elements]
   (for [el grid-elements]
     (if (= :path (first el))
-      (render-path el definition/default-axis-style)
-      (render-circle el definition/default-axis-style))))
+      (render-path el (definition/default-axis-style))
+      (render-circle el (definition/default-axis-style)))))
 
 (def transformation-map {:polar "translate(450, 350) scale(320)" :cartesian "translate(50, 50) scale(640)"})
 
-(defn generate-graph
+(defn render-graph
   [paths grid]
   [:svg {:width "100%" :height "100%"}
    [:g {:transform ((definition/get-type (definition/get-coordinate-system)) transformation-map)}
@@ -42,4 +41,7 @@
     [:g
      paths]]])
 
-(def paths (generate-graph (path-geometry->svg path/data-paths) (grid-geometry->svg norm/axes-grid)))
+(defn render
+  [data-source]
+  (let [graph-elements (graph-core/process-graph data-source)]
+    (render-graph (path-geometry->svg (second graph-elements)) (grid-geometry->svg (first graph-elements)) )))

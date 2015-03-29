@@ -1,7 +1,11 @@
 (ns simplection.canvasgraph.intersection
   (:require [simplection.canvasgraph.definition :as definition]
             [simplection.canvasgraph.acoordinates :as acoordinates]
-            [simplection.canvasgraph.scale :as scale]))
+            [simplection.canvasgraph.scale :as scale]
+            [simplection.canvasgraph.acoordinates :as acoordinates]
+     #+cljs [simplection.canvasgraph.acoordinates :refer [Cartesian Polar]])
+  (#+clj :require #+cljs :require-macros [simplection.core :as cr])
+  #+clj (:import [simplection.canvasgraph.acoordinates Cartesian Polar]))
 
 (defn cross
   ([] '(()))
@@ -20,8 +24,6 @@
         s-2 (definition/get-data (second data-scaling))]
     (intersect-fn s-1 s-2)))
 
-(def intersection-rules (intersect))
-
 (defn in?
   "True if a collection contains element."
   [seq element]
@@ -31,13 +33,19 @@
   (let [ks (keys (first table))]
        (into {} (for [k ks] [k (map #(% k) table)]))))
 
-(defn table->series-coordinates
-  [table intersection-rules]
-  (let [transposed-table (transpose-table table)]
+(defn intersect-values
+  [table]
+  (let [transposed-table (transpose-table table)
+        intersection-rules (intersect)]
     (into {}
       (for [rule intersection-rules]
          [rule
           (filter #(not (in? % nil))
                   (map vector (transposed-table (first rule)) (transposed-table (last rule))))]))))
 
-(def series-coordinates (table->series-coordinates scale/scaled-table intersection-rules))
+(defn table->series-coordinates
+  [scaled-values]
+  (let [coordinate-system ((cr/coordinates-resolver) (definition/get-type (definition/get-coordinate-system)))]
+  (vector
+    (acoordinates/generate-grid coordinate-system (first scaled-values))
+    (intersect-values (second scaled-values)))))

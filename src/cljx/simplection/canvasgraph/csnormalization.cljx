@@ -7,13 +7,19 @@
   (#+clj :require #+cljs :require-macros [simplection.core :as cr])
   #+clj (:import [simplection.canvasgraph.acoordinates Cartesian Polar]))
 
-(def axes-grid
-  (let [r ((cr/coordinates-resolver) (definition/get-type (definition/get-coordinate-system)))]
-    (acoordinates/normalize-grid-coordinates
-     r
-     (acoordinates/generate-grid r scale/axes-points))))
+(defn normalize-grid-coordinates
+  [grid-coordinates]
+  (let [coordinate-system ((cr/coordinates-resolver) (definition/get-type (definition/get-coordinate-system)))]
+    (acoordinates/normalize-grid-coordinates coordinate-system grid-coordinates)))
 
-(def series-coordinates
+(defn normalize-series-coordinates
+  [series-coordinates]
   (acoordinates/normalize-table-coordinates
    ((cr/coordinates-resolver) (definition/get-type (definition/get-coordinate-system)))
-   intersection/series-coordinates))
+   series-coordinates))
+
+(defn normalize-coordinates
+  [series-coordinates]
+  (vector
+   (normalize-grid-coordinates (first series-coordinates))
+   (normalize-series-coordinates (second series-coordinates))))

@@ -8,24 +8,19 @@
   (#+clj :require #+cljs :require-macros [simplection.core :as cr])
   #+clj (:import [simplection.canvasgraph.ascale Category Numeric]))
 
-(def aggregate-keys (hme/select-keys-rest (first series/stacked-table) definition/categories))
-
 (defn apply-scaling
   [graph-values scale coordinates-range]
   (let [scale-record ((cr/scale-resolver) (definition/get-type scale))]
       (ascale/scale-values scale-record graph-values (definition/get-data scale) coordinates-range)))
 
-(defn scale-data
+(defn scale-values
   [table]
   (let [data-scaling (definition/get-data-scaling)
+        coordinates-range (coordinates/get-coordinates-range)
         axes-points []]
     (apply-scaling
       (apply-scaling [axes-points table]
                      (first data-scaling)
-                     (first coordinates/coordinates-range))
+                     (first coordinates-range))
      (second data-scaling)
-     (second coordinates/coordinates-range))))
-
-(def graph-values (scale-data series/stacked-table))
-(def axes-points (first graph-values))
-(def scaled-table (second graph-values))
+     (second coordinates-range))))
