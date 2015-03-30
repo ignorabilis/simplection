@@ -29,11 +29,10 @@
 
 (defn aggregate-table
   "Group, aggregate, filter, sort, etc. the whole table."
-  [table-to-organize organization-map]
-  (merge-table
-   (group-table
-    (filter-table-columns table-to-organize (keys organization-map))
-    definition/groupings)
-   organization-map))
-
-(def aggregated-table (aggregate-table @g-data/data-source definition/organize-rules)) 
+  [table-to-aggregate]
+  (let [aggregate-rules (definition/get-aggregate-rules)]
+    (merge-table
+     (group-table
+      (filter-table-columns table-to-aggregate (keys aggregate-rules))
+      (definition/get-groupings))
+     aggregate-rules)))
