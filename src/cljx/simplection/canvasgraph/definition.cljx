@@ -4,16 +4,16 @@
 
 (def default-graph-definition (atom {:extrapolation "to be implemented"
                                      :interpolation "to be implemented"
-                                     :aggregate-rules {}
+                                     :aggregate-rules {} #_{:category aggs/category-grouping :series aggs/series-grouping :y1 + :y2 +}
                                      :stack-rules {:type :stack}
-                                     :coordinate-system {:type :polar}
+                                     :coordinate-system {:type :cartesian}
                                      :data-scaling [{:type :category}
                                                     {:type :numeric}]
                                      :cluster-rules "to be implemented"
                                      :intersection :cross
                                      :data-paths :straight
                                      :data-markers "to be implemented"
-                                     :data-areas "to be implemented"
+                                     :data-areas :none
                                      :data-mask "to be implemented"
                                      :data-styles {[[[:category] [:y1 '(:a)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
                                                                                 :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
@@ -65,9 +65,14 @@
   (get-in @default-graph-definition [:intersection]))
 
 (defn get-data-paths
-  "Get the intersection algorithm for the scaled data."
+  "Get the data paths types."
   []
   (get-in @default-graph-definition [:data-paths]))
+
+(defn get-areas
+  "Get the areas types."
+  []
+  (get-in @default-graph-definition [:data-areas]))
 
 (defn get-type
   "Get the type that corresponds to a specific record."
@@ -107,7 +112,7 @@
    {:cartesian (/ stroke-width 2)
     :polar stroke-width}))
 
-(defn default-style
+(defn default-path-style
   []
   [{:stroke "#74ACD1" :fill "none" :stroke-width (get-stroke-width 0.01)}
    {:stroke "#87AAB0" :fill "none" :stroke-width (get-stroke-width 0.01)}
@@ -124,6 +129,42 @@
    {:stroke "#FFD3B5" :fill "none" :stroke-width (get-stroke-width 0.01)}
    {:stroke "#FDE69A" :fill "none" :stroke-width (get-stroke-width 0.01)}
    {:stroke "#C69B78" :fill "none" :stroke-width (get-stroke-width 0.01)}])
+
+(defn default-aux-path-style
+  []
+  [{:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}
+   {:stroke "none" :fill "none"}])
+
+(defn default-area-style
+  []
+  [{:stroke "none" :fill "#74ACD1" :fill-opacity 0.5}
+   {:stroke "none" :fill "#87AAB0" :fill-opacity 0.5}
+   {:stroke "none" :fill "#FFAF70" :fill-opacity 0.5}
+   {:stroke "none" :fill "#82C695" :fill-opacity 0.5}
+   {:stroke "none" :fill "#CDE8BB" :fill-opacity 0.5}
+   {:stroke "none" :fill "#8DD3DF" :fill-opacity 0.5}
+   {:stroke "none" :fill "#DCC2C1" :fill-opacity 0.5}
+   {:stroke "none" :fill "#B3B586" :fill-opacity 0.5}
+   {:stroke "none" :fill "#C1E7F0" :fill-opacity 0.5}
+   {:stroke "none" :fill "#FBD0E3" :fill-opacity 0.5}
+   {:stroke "none" :fill "#B4D2CA" :fill-opacity 0.5}
+   {:stroke "none" :fill "#CADCF0" :fill-opacity 0.5}
+   {:stroke "none" :fill "#FFD3B5" :fill-opacity 0.5}
+   {:stroke "none" :fill "#FDE69A" :fill-opacity 0.5}
+   {:stroke "none" :fill "#C69B78" :fill-opacity 0.5}])
 
 (defn default-axis-style
   []

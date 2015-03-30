@@ -79,12 +79,14 @@
 
 (def dimensions (atom (get-dimensions (first @g-data/data-source))))
 
-(def chart-types (atom #{"Line" "Area"}))
-(def aggregates (atom #{"SUM" "AVG" "MIN" "MAX" "MEAN" "COUNT"}))
-(def coord-sys-types (atom {:cartesian "Cartesian" :polar "Polar"}))
+(def chart-types [{:display-value "Line" :value :line :coordinate-system :cartesian :data-areas :none}
+                  {:display-value "Area" :value :area :coordinate-system :cartesian :data-areas :areatoaxis}
+                  {:display-value "Radar" :value :radar :coordinate-system :polar :data-areas :shape}
+                  {:display-value "Radar Area" :value :radar-area :coordinate-system :polar :data-areas :shapearea}])
 
-(def selected-coord-sys-type (atom :polar))
-(def selected-chart-type (atom ""))
+(def aggregates (atom #{"SUM" "AVG" "MIN" "MAX" "MEAN" "COUNT"}))
+
+(def selected-chart-type (atom {:display-value "Line" :value :line :coordinate-system :cartesian :data-areas :none}))
 (def selected-rows (atom #{}))
 (def selected-columns (atom #{}))
 (def selected-groupings (atom #{}))
@@ -127,12 +129,11 @@
          merge
          {:aggregate-rules (get-aggregate-rules)}))
 
-(defn refresh-type [])
-
-(defn refresh-coordinates []
+(defn refresh-type []
   (swap! definition/default-graph-definition
          merge
-         {:coordinate-system {:type @selected-coord-sys-type}}))
+         {:coordinate-system {:type (:coordinate-system @selected-chart-type)}
+          :data-areas (:data-areas @selected-chart-type)}))
 
 (defn refresh-graph []
   (reset! graph #_(str (rendering/render @g-data/data-source))
@@ -157,10 +158,6 @@
            :selected-chart-type
            (fn [_ _ _ _] (refresh-type)))
 
-(add-watch selected-coord-sys-type
-           :selected-coord-sys-type
-           (fn [_ _ _ _] (refresh-coordinates)))
-
 (hist/replace-library! (atom []))
 (hist/replace-prophecy! (atom []))
 
@@ -169,4 +166,4 @@
 (hist/record! selected-columns :selected-columns)
 (hist/record! selected-rows :selected-rows)
 (hist/record! selected-groupings :selected-groupings)
-(hist/record! selected-coord-sys-type :selected-coord-sys-type)
+(hist/record! selected-chart-type :selected-chart-type)

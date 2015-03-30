@@ -58,8 +58,8 @@
   (normalize-table-coordinates [this table])
   (normalize-grid-coordinates [this table]))
 
-(defrecord Cartesian[])
-(defrecord Polar[])
+(defrecord Cartesian [])
+(defrecord Polar [])
 
 (extend-protocol PCoordinateSystem
 

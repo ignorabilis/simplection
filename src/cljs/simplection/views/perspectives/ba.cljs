@@ -376,22 +376,21 @@
 (defn init-right-menu-chart-types []
   [:div.row.white-border {:id "designer-right-menu--types"
                           :style {:height "40%"}}
-   [:h4 (str "Chart Type: " @controller/selected-chart-type)]
-   (let [c-types @controller/chart-types]
+   [:h4 (str "Chart Type: " (:display-value @controller/selected-chart-type))]
+   (let [c-types controller/chart-types]
      [:div.container-fluid {:style {:padding "0"}}
-      (for [mod '(0 1)]
         [:div.col-lg-12
-         (for [t (take-nth 2 (drop mod c-types))]
-           [:button {:value t
+         (for [t c-types]
+           [:button {:value (:value t)
                      :class "draggable-chart-item"
                      :on-click
                      #(reset! controller/selected-chart-type t)
                      :style {:width "100%"
                              :margin "4px 0 0 0"}}
-            t])])])
+            (:display-value t)])]])
 
-   [:h4 (str "Coordinate System: " (@controller/selected-coord-sys-type @controller/coord-sys-types))]
-   (let [c-types @controller/coord-sys-types]
+   #_[:h4 (str "Coordinate System: " (@controller/selected-coord-sys-type @controller/coord-sys-types))]
+   #_(let [c-types @controller/coord-sys-types]
      [:div.container-fluid {:style {:padding "0"}}
          (for [[k v] c-types]
            [:button {:value k

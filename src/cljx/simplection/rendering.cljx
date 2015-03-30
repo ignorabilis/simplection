@@ -4,14 +4,40 @@
             [simplection.canvasgraph.defaults :as defaults]
             [simplection.canvasgraph.definition :as definition]))
 
-(defn generate-path
-  [value style]
-  [:path {:d (string/join " " (second value)) :fill (:fill style) :stroke (:stroke style) :stroke-width (:stroke-width style)}])
+(defn map-every-nth [f coll n]
+  (map-indexed #(if (zero? (mod (inc %1) n)) (f %2) %2) coll))
 
-(defn path-geometry->svg
+(defn generate-geometries
+  [value area-style aux-path-style path-style]
+  [:g
+   [:path {:d (string/join " " (map-every-nth #(- %) (:area (second value)) 3))
+           :fill (:fill area-style) :stroke (:stroke area-style) :fill-opacity (:fill-opacity area-style)}]
+
+   [:path {:d (string/join " " (map-every-nth #(- %) (:aux-path (second value)) 3))
+           :fill (:fill aux-path-style) :stroke (:stroke aux-path-style) :stroke-width (:stroke-width aux-path-style)}]
+
+   [:path {:d (string/join " " (map-every-nth #(- %) (:path (second value)) 3))
+           :fill (:fill path-style) :stroke (:stroke path-style) :stroke-width (:stroke-width path-style)}]])
+
+(defn area-geometry->svg
   "Convert path geometry instructions to svg path"
   [table]
-  (map generate-path table (definition/default-style)))
+  (map generate-area table (definition/default-area-style)))
+
+(defn aux-paths-geometry->svg
+  "Convert path geometry instructions to svg path"
+  [table]
+  (map generate-aux-path table (definition/default-aux-path-style)))
+
+(defn paths-geometry->svg
+  "Convert path geometry instructions to svg path"
+  [table]
+  (map generate-path table (definition/default-path-style)))
+
+(defn geometries->svg
+  "Convert path geometry instructions to svg path"
+  [table]
+  (map generate-geometries table (definition/default-area-style) (definition/default-aux-path-style) (definition/default-path-style)))
 
 (defn render-circle
   [value style]
@@ -20,8 +46,10 @@
 
 (defn render-path
   [value style]
-  [:path {:d (str "M " (string/join " " (second value)) " L " (string/join " L " (map (partial string/join " ") (rest value))))
-          :fill (:fill style) :stroke (:stroke style) :stroke-width (:stroke-width style)}])
+  (let [points (rest value)
+        inverted-points (map #(vector (first %) (- (second %))) points)]
+  [:path {:d (str "M " (string/join " " (first inverted-points)) " L " (string/join " L " (map (partial string/join " ") inverted-points)))
+          :fill (:fill style) :stroke (:stroke style) :stroke-width (:stroke-width style)}]))
 
 (defn grid-geometry->svg
   "Convert grid geometry instructions to svg."
@@ -31,7 +59,7 @@
       (render-path el (definition/default-axis-style))
       (render-circle el (definition/default-axis-style)))))
 
-(def transformation-map {:polar "translate(450, 350) scale(320)" :cartesian "translate(50, 50) scale(640)"})
+(def transformation-map {:polar "translate(450, 350) scale(320)" :cartesian "translate(50, 700) scale(640)"})
 
 (defn render-default-graph
   []
@@ -43,19 +71,21 @@
   ([]
    (render-default-graph))
 
-  ([paths grid]
+  ([grid geometries]
     [:svg {:width "100%" :height "100%"}
      [:g {:transform ((definition/get-type (definition/get-coordinate-system)) transformation-map)}
       [:g
        grid]
       [:g
-       paths]]]))
+       geometries]]]))
 
 (defn render
   [data-source]
   (if (definition/is-definition-valid)
     (let [graph-elements (graph-core/process-graph data-source)]
-     #_graph-elements (render-graph (path-geometry->svg (second graph-elements)) (grid-geometry->svg (first graph-elements))))
+     #_graph-elements (render-graph
+                       (grid-geometry->svg (first graph-elements))
+                       (geometries->svg (second graph-elements))))
     (render-default-graph)))
 
 

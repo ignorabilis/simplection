@@ -6,14 +6,16 @@
             [simplection.canvasgraph.scale :as scale]
             [simplection.canvasgraph.intersection :as intersection]
             [simplection.canvasgraph.csnormalization :as csnormalization]
-            [simplection.canvasgraph.path :as path]))
+            [simplection.canvasgraph.path :as path]
+            [simplection.canvasgraph.area :as area]))
 
 (defn process-graph
   [data-source]
-  (path/series-coordinates->data-paths
-   (csnormalization/normalize-coordinates
-    (intersection/table->series-coordinates
-     (scale/scale-values
-      (stack/stack-series
-       (series/get-static-series
-        (aggregator/aggregate-table data-source))))))))
+  (area/data-paths->areas
+   (path/series-coordinates->data-paths
+    (csnormalization/normalize-coordinates
+     (intersection/table->series-coordinates
+      (scale/scale-values
+       (stack/stack-series
+        (series/get-static-series
+         (aggregator/aggregate-table data-source)))))))))

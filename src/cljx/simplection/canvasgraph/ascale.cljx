@@ -35,8 +35,8 @@
 (defprotocol PScale
   (scale-values [this table ks cr]))
 
-(defrecord Category[])
-(defrecord Numeric[])
+(defrecord Category [])
+(defrecord Numeric [])
 
 (extend-protocol PScale
 

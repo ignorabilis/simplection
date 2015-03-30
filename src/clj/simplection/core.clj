@@ -2,10 +2,12 @@
   (:require [clojure.string :as string]
             [simplection.canvasgraph.ascale :as scale]
             [simplection.canvasgraph.acoordinates :as coordinates]
-            [simplection.canvasgraph.apath :as path])
+            [simplection.canvasgraph.apath :as path]
+            [simplection.canvasgraph.aarea :as area])
   (:import [simplection.canvasgraph.ascale Category Numeric]
            [simplection.canvasgraph.acoordinates Cartesian Polar]
-           [simplection.canvasgraph.apath Straight]))
+           [simplection.canvasgraph.apath Straight]
+           [simplection.canvasgraph.aarea None Shape ShapeArea AreaToAxis]))
 
 (defn record-mapper
   [hm record-class]
@@ -30,3 +32,7 @@
 (defmacro path-resolver
   []
   (record-factory path/PPathGeometry))
+
+(defmacro area-resolver
+  []
+  (record-factory area/PAreaGeometry))
