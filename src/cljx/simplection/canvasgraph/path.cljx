@@ -8,10 +8,9 @@
 (defn generate-paths
   [table]
   (zipmap (keys table)
-    (for [data-path (definition/get-data-paths)]
-      (let [data-path-record ((cr/path-resolver) (definition/get-type data-path))
-            k (first (definition/get-data data-path))]
-        (apath/generate-data-path data-path-record (table k))))))
+          (let [data-path-record ((cr/path-resolver) (definition/get-data-paths))]
+            (for [[k v] table]
+              (apath/generate-data-path data-path-record v)))))
 
 (defn series-coordinates->data-paths
   [normalized-coordinates]

@@ -1,14 +1,10 @@
 (ns simplection.canvasgraph.stack
-  (:require [simplection.hashmap-ext :as hme]))
+  (:require [simplection.hashmap-ext :as hme]
+            [simplection.canvasgraph.series :as series]))
 
 (defn get-default-stack-rules
-  "By default each series is not stacked."
   [static-series]
-  (map vector
-    (distinct
-      (for [[k v] (apply merge static-series)
-            [k-2 v-2] v]
-        k-2))))
+  (map vector (series/get-default-series static-series)))
 
 (def +-nil (fnil + 0 0))
 

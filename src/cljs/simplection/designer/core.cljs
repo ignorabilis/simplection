@@ -81,10 +81,9 @@
 
 (def chart-types (atom #{"Line" "Area"}))
 (def aggregates (atom #{"SUM" "AVG" "MIN" "MAX" "MEAN" "COUNT"}))
-(def coord-sys-types (atom #{{:value :cartesian :displayValue "Cartesian"},
-                         {:value :polar :displayValue "Polar"}}))
+(def coord-sys-types (atom {:cartesian "Cartesian" :polar "Polar"}))
 
-(def selected-coord-sys-type (atom nil))
+(def selected-coord-sys-type (atom :polar))
 (def selected-chart-type (atom ""))
 (def selected-rows (atom #{}))
 (def selected-columns (atom #{}))
@@ -113,33 +112,31 @@
   (if (empty? map) {}
     (assoc (get-aggregate-rules-recursive (rest map))
       (keyword (:value (first map)))
-      (get-aggregate-func (:aggregate (first map)))
-      )))
+      (get-aggregate-func (:aggregate (first map))))))
 
 (defn get-aggregate-rules []
   (merge (get-aggregate-rules-recursive @selected-columns)
     (get-aggregate-rules-recursive @selected-rows)
     (get-aggregate-rules-recursive @selected-groupings)))
 
-(def graph (atom (rendering/render @g-data/data-source)))
+(def graph (atom #_(str (rendering/render @g-data/data-source))
+                 (rendering/render @g-data/data-source)))
 
 (defn refresh-aggregates []
   (swap! definition/default-graph-definition
          merge
          {:aggregate-rules (get-aggregate-rules)}))
 
-(defn refresh-type []
-  #_(swap! definition/default-graph-definition
-         merge
-         {:coordinate-system {:type (:value @selected-coord-sys-type)}}))
+(defn refresh-type [])
 
 (defn refresh-coordinates []
   (swap! definition/default-graph-definition
          merge
-         {:coordinate-system {:type (:value @selected-coord-sys-type)}}))
+         {:coordinate-system {:type @selected-coord-sys-type}}))
 
 (defn refresh-graph []
-  (reset! graph (rendering/render @g-data/data-source)))
+  (reset! graph #_(str (rendering/render @g-data/data-source))
+                (rendering/render @g-data/data-source)))
 
 (add-watch definition/default-graph-definition :graph-definition
            (fn [_ _ _ _] (refresh-graph)))
@@ -172,3 +169,4 @@
 (hist/record! selected-columns :selected-columns)
 (hist/record! selected-rows :selected-rows)
 (hist/record! selected-groupings :selected-groupings)
+(hist/record! selected-coord-sys-type :selected-coord-sys-type)

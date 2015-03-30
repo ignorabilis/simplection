@@ -389,17 +389,18 @@
                      :style {:width "100%"
                              :margin "4px 0 0 0"}}
             t])])])
-   [:h4 (str "Coordinate System: " (:displayValue @controller/selected-coord-sys-type))]
+
+   [:h4 (str "Coordinate System: " (@controller/selected-coord-sys-type @controller/coord-sys-types))]
    (let [c-types @controller/coord-sys-types]
      [:div.container-fluid {:style {:padding "0"}}
-         (for [t c-types]
-           [:button {:value (:value t)
+         (for [[k v] c-types]
+           [:button {:value k
                      :class "draggable-chart-item"
                      :on-click
-                     #(reset! controller/selected-coord-sys-type t)
+                     #(reset! controller/selected-coord-sys-type k)
                      :style {:width "100%"
                              :margin "4px 0 0 0"}}
-            (:displayValue t)])])
+            v])])
    ])
 
 (defn init-right-menu-settings []

@@ -4,74 +4,35 @@
 
 (def default-graph-definition (atom {:extrapolation "to be implemented"
                                      :interpolation "to be implemented"
-                                     :aggregate-rules {:category aggs/category-grouping :series aggs/series-grouping :y1 + :y2 +}
-                                     :stack-rules {:type :stack :data nil #_[[:y1 '(:a)]
-                                                                       [:y1 '(:b)]
-                                                                       [:y1 '(:c)]
-                                                                       [:y2 '(:a)]
-                                                                       [:y2 '(:b)]
-                                                                       [:y2 '(:c)]]}
+                                     :aggregate-rules {}
+                                     :stack-rules {:type :stack}
                                      :coordinate-system {:type :polar}
-                                     :data-scaling [{:type :category :data [[:category]]}
-                                                    {:type :numeric :data [[:y1 '(:a)]
-                                                                           [:y1 '(:b)]
-                                                                           [:y1 '(:c)]
-                                                                           [:y2 '(:a)]
-                                                                           [:y2 '(:b)]
-                                                                           [:y2 '(:c)]]}]
+                                     :data-scaling [{:type :category}
+                                                    {:type :numeric}]
                                      :cluster-rules "to be implemented"
                                      :intersection :cross
-                                     :data-paths [{:type :straight :data [[[:category] [:y1 '(:a)]]]}
-                                                  {:type :straight :data [[[:category] [:y1 '(:b)]]]}
-                                                  {:type :straight :data [[[:category] [:y1 '(:c)]]]}
-                                                  {:type :straight :data [[[:category] [:y2 '(:a)]]]}
-                                                  {:type :straight :data [[[:category] [:y2 '(:b)]]]}
-                                                  {:type :straight :data [[[:category] [:y2 '(:c)]]]}]
+                                     :data-paths :straight
                                      :data-markers "to be implemented"
                                      :data-areas "to be implemented"
                                      :data-mask "to be implemented"
-                                     :data-styles {[[[:DC] [:DY2 '(:a)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
-                                                                        :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
-                                                                        :area {:fill "yellow" :stroke "none" :stroke-width 0}}
-                                                  [[[:DC] [:DY1 '(:a)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
-                                                                        :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
-                                                                        :area {:fill "yellow" :stroke "none" :stroke-width 0}}
-                                                  [[[:DC] [:DY1 '(:b)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
-                                                                        :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
-                                                                        :area {:fill "yellow" :stroke "none" :stroke-width 0}}
-                                                  [[[:DC] [:DY2 '(:b)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
-                                                                        :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
-                                                                        :area {:fill "yellow" :stroke "none" :stroke-width 0}}}}))
-
-(defn get-stroke-width
-  "Get the appropriate stroke width according to the graph type."
-  [stroke-width]
-  ((get-type (get-coordinate-system))
-   {:cartesian (/ stroke-width 2)
-    :polar stroke-width}))
-
-
-(defn default-style
-  []
-  [{:stroke "#74ACD1" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#87AAB0" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#FFAF70" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#82C695" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#CDE8BB" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#8DD3DF" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#DCC2C1" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#B3B586" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#C1E7F0" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#FBD0E3" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#B4D2CA" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#CADCF0" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#FFD3B5" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#FDE69A" :fill "none" :stroke-width (get-stroke-width 0.01)}
-   {:stroke "#C69B78" :fill "none" :stroke-width (get-stroke-width 0.01)}])
-
-(defn default-axis-style
-  []
-  {:stroke "#999999" :fill "none" :stroke-width (get-stroke-width 0.003)})
+                                     :data-styles {[[[:category] [:y1 '(:a)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                                :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                                :area {:fill "yellow" :stroke "none" :stroke-width 0}}
+                                                  [[[:category] [:y1 '(:b)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :area {:fill "yellow" :stroke "none" :stroke-width 0}}
+                                                  [[[:category] [:y1 '(:c)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :area {:fill "yellow" :stroke "none" :stroke-width 0}}
+                                                  [[[:category] [:y2 '(:a)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :area {:fill "yellow" :stroke "none" :stroke-width 0}}
+                                                  [[[:category] [:y2 '(:b)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :area {:fill "yellow" :stroke "none" :stroke-width 0}}
+                                                  [[[:category] [:y2 '(:c)]]] {:path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :aux-path {:fill "none" :stroke "green" :stroke-width 0.01}
+                                                                               :area {:fill "yellow" :stroke "none" :stroke-width 0}}}}))
 
 (defn get-aggregate-rules
   "Get the aggregate rules for the graph."
@@ -133,3 +94,37 @@
 (defn get-aggregates
   []
   (hme/select-keys-rest (get-aggregate-rules) (get-groupings)))
+
+(defn is-definition-valid
+  []
+  (and (seq (get-categories))
+       (seq (get-aggregates))))
+
+(defn get-stroke-width
+  "Get the appropriate stroke width according to the graph type."
+  [stroke-width]
+  ((get-type (get-coordinate-system))
+   {:cartesian (/ stroke-width 2)
+    :polar stroke-width}))
+
+(defn default-style
+  []
+  [{:stroke "#74ACD1" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#87AAB0" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#FFAF70" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#82C695" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#CDE8BB" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#8DD3DF" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#DCC2C1" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#B3B586" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#C1E7F0" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#FBD0E3" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#B4D2CA" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#CADCF0" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#FFD3B5" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#FDE69A" :fill "none" :stroke-width (get-stroke-width 0.01)}
+   {:stroke "#C69B78" :fill "none" :stroke-width (get-stroke-width 0.01)}])
+
+(defn default-axis-style
+  []
+  {:stroke "#999999" :fill "none" :stroke-width (get-stroke-width 0.003)})

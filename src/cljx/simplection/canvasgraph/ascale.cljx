@@ -1,6 +1,7 @@
 (ns simplection.canvasgraph.ascale
   (:require [simplection.range :as ran]
-            [simplection.canvasgraph.axis :as axis]))
+            [simplection.canvasgraph.axis :as axis]
+            [simplection.canvasgraph.series :as series]))
 
 (defn range-dimensions
   "Converts categories to numeric range."
@@ -40,9 +41,9 @@
 (extend-protocol PScale
 
   Category
-  (scale-values [this graph-values ks cr]
-    (table-range-dimensions graph-values ks cr))
+  (scale-values [this graph-values _ks cr] ;to do - remove hardcoded values
+    (table-range-dimensions graph-values (map vector @series/default-categories) cr))
 
   Numeric
-  (scale-values [this graph-values ks cr]
-    (table-range-measures graph-values ks cr)))
+  (scale-values [this graph-values _ks cr] ;to do - remove hardcoded values
+    (table-range-measures graph-values @series/default-series cr)))

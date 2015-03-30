@@ -1,6 +1,7 @@
 (ns simplection.rendering
   (:require [clojure.string :as string]
             [simplection.canvasgraph.core :as graph-core]
+            [simplection.canvasgraph.defaults :as defaults]
             [simplection.canvasgraph.definition :as definition]))
 
 (defn generate-path
@@ -32,16 +33,29 @@
 
 (def transformation-map {:polar "translate(450, 350) scale(320)" :cartesian "translate(50, 50) scale(640)"})
 
+(defn render-default-graph
+  []
+  ((definition/get-type (definition/get-coordinate-system))
+   {:cartesian defaults/cartesian-graph
+    :polar defaults/polar-graph}))
+
 (defn render-graph
-  [paths grid]
-  [:svg {:width "100%" :height "100%"}
-   [:g {:transform ((definition/get-type (definition/get-coordinate-system)) transformation-map)}
-    [:g
-     grid]
-    [:g
-     paths]]])
+  ([]
+   (render-default-graph))
+
+  ([paths grid]
+    [:svg {:width "100%" :height "100%"}
+     [:g {:transform ((definition/get-type (definition/get-coordinate-system)) transformation-map)}
+      [:g
+       grid]
+      [:g
+       paths]]]))
 
 (defn render
   [data-source]
-  (let [graph-elements (graph-core/process-graph data-source)]
-    (render-graph (path-geometry->svg (second graph-elements)) (grid-geometry->svg (first graph-elements)) )))
+  (if (definition/is-definition-valid)
+    (let [graph-elements (graph-core/process-graph data-source)]
+     #_graph-elements (render-graph (path-geometry->svg (second graph-elements)) (grid-geometry->svg (first graph-elements))))
+    (render-default-graph)))
+
+

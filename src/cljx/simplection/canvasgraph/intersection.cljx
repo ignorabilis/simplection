@@ -2,6 +2,7 @@
   (:require [simplection.canvasgraph.definition :as definition]
             [simplection.canvasgraph.acoordinates :as acoordinates]
             [simplection.canvasgraph.scale :as scale]
+            [simplection.canvasgraph.series :as series]
             [simplection.canvasgraph.acoordinates :as acoordinates]
      #+cljs [simplection.canvasgraph.acoordinates :refer [Cartesian Polar]])
   (#+clj :require #+cljs :require-macros [simplection.core :as cr])
@@ -19,9 +20,8 @@
 (defn intersect
   []
   (let [intersect-fn (intersection-fns (definition/get-intersection))
-        data-scaling (definition/get-data-scaling)
-        s-1 (definition/get-data (first data-scaling))
-        s-2 (definition/get-data (second data-scaling))]
+        s-1 (map vector @series/default-categories) ; to do - remove hardcoded values
+        s-2 @series/default-series] ; to do - remove hardcoded values
     (intersect-fn s-1 s-2)))
 
 (defn in?
